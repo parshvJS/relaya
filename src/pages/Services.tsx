@@ -1,4 +1,7 @@
 import { Check } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ScrollToTop from '@/components/ScrollToTop';
 
 const Services = () => {
   const services = [
@@ -49,9 +52,12 @@ const Services = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <section className="container py-24 space-y-8">
+    <>
+      <Header />
+      <ScrollToTop />
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <section className="container py-24 space-y-8">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             Our Services
@@ -85,6 +91,8 @@ const Services = () => {
         </div>
       </section>
     </div>
+    <Footer />
+    </>
   );
 };
 

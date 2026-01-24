@@ -1,4 +1,7 @@
 import { Zap, Shield, Sparkles, BarChart, Globe, Users } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ScrollToTop from '@/components/ScrollToTop';
 
 const Features = () => {
   const features = [
@@ -35,9 +38,12 @@ const Features = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <section className="container py-24 space-y-8">
+    <>
+      <Header />
+      <ScrollToTop />
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <section className="container py-24 space-y-8">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             Powerful Features
@@ -90,6 +96,8 @@ const Features = () => {
         </div>
       </section>
     </div>
+    <Footer />
+    </>
   );
 };
 

@@ -4,6 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ScrollToTop from '@/components/ScrollToTop';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -77,9 +80,12 @@ ${formData.message}
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <section className="container py-24 space-y-8">
+    <>
+      <Header />
+      <ScrollToTop />
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <section className="container py-24 space-y-8">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             Get in Touch
@@ -212,6 +218,8 @@ ${formData.message}
         </div>
       </section>
     </div>
+    <Footer />
+    </>
   );
 };
 
