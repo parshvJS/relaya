@@ -139,12 +139,9 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-center gap-4">
           <p className="text-sm text-muted-foreground">
             {currentYear} Relaya. All rights reserved.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Powered by AI. Built for enterprise.
           </p>
         </div>
       </div>
