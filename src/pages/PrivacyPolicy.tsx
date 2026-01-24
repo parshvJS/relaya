@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -5,6 +6,26 @@ import ScrollToTop from '@/components/ScrollToTop';
 const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Privacy Policy - RELAYA | Data Protection & Privacy Practices</title>
+        <meta name="description" content="RELAYA's Privacy Policy explains how we collect, use, disclose, and safeguard your information. Learn about our commitment to protecting your data and privacy." />
+        <link rel="canonical" href="https://relaya.com/privacy" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/privacy" />
+        <meta property="og:title" content="Privacy Policy - RELAYA" />
+        <meta property="og:description" content="RELAYA's Privacy Policy explains how we collect, use, and protect your information." />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Privacy Policy - RELAYA" />
+        <meta name="twitter:description" content="Learn about RELAYA's data protection and privacy practices." />
+
+        {/* Robots */}
+        <meta name="robots" content="index, follow" />
+      </Helmet>
+
       <ScrollToTop />
       <Header />
       <main className="flex-1 bg-background">

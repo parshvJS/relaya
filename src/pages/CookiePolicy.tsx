@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -5,6 +6,17 @@ import ScrollToTop from '@/components/ScrollToTop';
 const CookiePolicy = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Cookie Policy - RELAYA | Cookie Usage & Tracking Information</title>
+        <meta name="description" content="Learn about how RELAYA uses cookies and similar tracking technologies to improve your experience on our platform." />
+        <link rel="canonical" href="https://relaya.com/cookies" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/cookies" />
+        <meta property="og:title" content="Cookie Policy - RELAYA" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
+
       <ScrollToTop />
       <Header />
       <main className="flex-1 bg-background">

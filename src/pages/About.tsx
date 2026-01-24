@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
-import { 
-  Zap, 
-  Shield, 
-  Target, 
-  Brain, 
-  Users, 
-  TrendingUp, 
+import { Helmet } from 'react-helmet-async';
+import {
+  Zap,
+  Shield,
+  Target,
+  Brain,
+  Users,
+  TrendingUp,
   Award,
   CheckCircle,
   ArrowRight,
@@ -96,6 +97,42 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <Helmet>
+        <title>About RELAYA - The Future of Autonomous Strategic Communications</title>
+        <meta name="description" content="RELAYA replaces unpredictable agency models with precision-engineered AI-native communications infrastructure. Discover our mission, core principles, and platform capabilities." />
+        <link rel="canonical" href="https://relaya.com/about" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/about" />
+        <meta property="og:title" content="About RELAYA - Autonomous Strategic Communications" />
+        <meta property="og:description" content="RELAYA replaces unpredictable agency models with precision-engineered AI-native communications infrastructure built for institutional accountability." />
+        <meta property="og:image" content="https://relaya.com/favicon.jpeg" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://relaya.com/about" />
+        <meta name="twitter:title" content="About RELAYA - Autonomous Strategic Communications" />
+        <meta name="twitter:description" content="Learn about RELAYA's mission to transform enterprise communications with AI-powered precision." />
+        <meta name="twitter:image" content="https://relaya.com/favicon.jpeg" />
+
+        {/* JSON-LD Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            "name": "About RELAYA",
+            "description": "RELAYA's mission, core principles, and platform capabilities for autonomous strategic communications",
+            "url": "https://relaya.com/about",
+            "mainEntity": {
+              "@type": "Organization",
+              "name": "RELAYA",
+              "description": "AI-powered enterprise PR platform delivering autonomous, compliance-ready strategic communications"
+            }
+          })}
+        </script>
+      </Helmet>
+
       <Header />
 
       {/* Hero Section */}

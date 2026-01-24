@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Search, FileText, Sparkles, Calendar, Send, Image, Images, Globe, Trophy } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -39,6 +40,62 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <Helmet>
+        <title>RELAYA - AI-Powered Enterprise PR Platform | Strategic Communications</title>
+        <meta name="description" content="Enterprise-grade PR services powered by AI. Autonomous, surgical, efficient. Generate compliance-ready content at scale with 50+ PR services across 10 capability layers." />
+        <link rel="canonical" href="https://relaya.com/" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/" />
+        <meta property="og:title" content="RELAYA - AI-Powered Enterprise PR Platform" />
+        <meta property="og:description" content="Enterprise-grade PR services powered by AI. Autonomous, surgical, efficient. Generate compliance-ready content at scale." />
+        <meta property="og:image" content="https://relaya.com/favicon.jpeg" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://relaya.com/" />
+        <meta name="twitter:title" content="RELAYA - AI-Powered Enterprise PR Platform" />
+        <meta name="twitter:description" content="Enterprise-grade PR services powered by AI. Autonomous, surgical, efficient." />
+        <meta name="twitter:image" content="https://relaya.com/favicon.jpeg" />
+
+        {/* JSON-LD Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "RELAYA",
+            "description": "Enterprise-grade AI-powered PR platform delivering autonomous, compliance-ready strategic communications",
+            "url": "https://relaya.com",
+            "logo": "https://relaya.com/favicon.jpeg",
+            "foundingDate": "2024",
+            "sameAs": [
+              "https://twitter.com/relaya",
+              "https://linkedin.com/company/relaya"
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "Customer Service",
+              "availableLanguage": ["English"]
+            }
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "RELAYA",
+            "url": "https://relaya.com",
+            "description": "AI-powered enterprise PR platform with 50+ services across 10 capability layers",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://relaya.com/?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          })}
+        </script>
+      </Helmet>
+
       {/* Sticky Header */}
       <Header />
 

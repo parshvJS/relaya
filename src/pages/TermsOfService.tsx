@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -5,6 +6,17 @@ import ScrollToTop from '@/components/ScrollToTop';
 const TermsOfService = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Terms of Service - RELAYA | Usage Terms & Service Agreement</title>
+        <meta name="description" content="RELAYA Terms of Service governing your use of our AI-powered PR platform. Review our usage terms, user obligations, and service agreement." />
+        <link rel="canonical" href="https://relaya.com/terms" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/terms" />
+        <meta property="og:title" content="Terms of Service - RELAYA" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
+
       <ScrollToTop />
       <Header />
       <main className="flex-1 bg-background">

@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -5,6 +6,17 @@ import ScrollToTop from '@/components/ScrollToTop';
 const AcceptableUse = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Acceptable Use Policy - RELAYA | Platform Usage Guidelines</title>
+        <meta name="description" content="RELAYA Acceptable Use Policy defines permitted and prohibited uses of our AI-powered PR platform to ensure responsible and ethical usage." />
+        <link rel="canonical" href="https://relaya.com/acceptable-use" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/acceptable-use" />
+        <meta property="og:title" content="Acceptable Use Policy - RELAYA" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
+
       <ScrollToTop />
       <Header />
       <main className="flex-1 bg-background">

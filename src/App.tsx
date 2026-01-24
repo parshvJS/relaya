@@ -8,6 +8,10 @@ import { AuthProvider } from "@/hooks/useAuth";
 import ScrollRestoration from "@/components/ScrollRestoration";
 import Index from "./pages/Index";
 import About from "./pages/About";
+import Services from "./pages/Services";
+import Pricing from "./pages/Pricing";
+import Features from "./pages/Features";
+import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
@@ -40,6 +44,10 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />

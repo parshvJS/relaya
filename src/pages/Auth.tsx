@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Zap, ArrowLeft, Mail, Lock, User } from 'lucide-react';
 import NetworkAnimation from '@/components/NetworkAnimation';
-import logo from '@/assets/logo.jpeg';
+import logo from '@/assets/logo.png';
 
 const Auth = () => {
   const navigate = useNavigate();

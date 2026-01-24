@@ -2,7 +2,7 @@ import { Menu, X, LogIn, LayoutDashboard } from 'lucide-react';
 import { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import logo from '@/assets/logo.jpeg';
+import logo from '@/assets/logo.png';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -87,10 +87,10 @@ const Header = () => {
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
-          <img 
-            src={logo} 
-            alt="Relaya Logo" 
-            className="h-10 w-auto object-contain transition-transform group-hover:scale-105"
+          <img
+            src={logo}
+            alt="Relaya Logo"
+            className="h-16 w-auto object-contain transition-transform group-hover:scale-105"
           />
         </Link>
 

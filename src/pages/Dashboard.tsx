@@ -47,7 +47,7 @@ import ImageGallery from '@/components/ImageGallery';
 import ScrollToTop from '@/components/ScrollToTop';
 import { useAuth } from '@/hooks/useAuth';
 import type { PRService } from '@/data/prServices';
-import logo from '@/assets/logo.jpeg';
+import logo from '@/assets/logo.png';
 
 const Dashboard = () => {
   const navigate = useNavigate();

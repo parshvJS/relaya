@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, ArrowLeft, User, Building, Briefcase, Save } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import logo from '@/assets/logo.jpeg';
+import logo from '@/assets/logo.png';
 
 const Profile = () => {
   const navigate = useNavigate();
