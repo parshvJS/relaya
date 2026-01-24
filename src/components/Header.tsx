@@ -27,12 +27,11 @@ const Header = () => {
   }, []);
 
   const navLinks = [
-    { label: 'Services', href: '#services', routeOnly: true },
-    { label: 'Tools', href: '#tools', routeOnly: true },
-    { label: 'Layers', href: '#layers', routeOnly: true },
-    { label: 'Outreach', href: '/outreach-autopilot', isRoute: true },
+    { label: 'Services', href: '/services', isRoute: true },
+    { label: 'Pricing', href: '/pricing', isRoute: true },
+    { label: 'Features', href: '/features', isRoute: true },
     { label: 'About', href: '/about', isRoute: true },
-    { label: 'Contact', href: '#contact', routeOnly: true },
+    { label: 'Contact', href: '/contact', isRoute: true },
   ];
 
   const scrollToSection = useCallback((href: string) => {
@@ -44,7 +43,7 @@ const Header = () => {
     
     if (element) {
       // Get header height for offset
-      const headerHeight = 64; // h-16 = 64px
+      const headerHeight = 160; // h-16 = 64px
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
       
@@ -56,7 +55,7 @@ const Header = () => {
       // Fallback for services - scroll to filter bar
       const filterBar = document.querySelector('[data-section="filters"]');
       if (filterBar) {
-        const headerHeight = 64;
+        const headerHeight = 160;
         const elementPosition = filterBar.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
         
@@ -84,13 +83,13 @@ const Header = () => {
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex p-4 items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
           <img
             src={logo}
             alt="Relaya Logo"
-            className="h-24 w-auto object-contain transition-transform group-hover:scale-105"
+            className="h-16  object-contain transition-transform group-hover:scale-105"
           />
         </Link>
 

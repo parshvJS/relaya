@@ -35,7 +35,7 @@ const Footer = () => {
               <img
                 src={logo}
                 alt="Relaya Logo"
-                className="h-24 w-auto object-contain"
+                className="h-20 w-auto object-contain"
               />
             </a>
             <p className="text-sm text-muted-foreground max-w-xs">
