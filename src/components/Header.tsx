@@ -90,7 +90,7 @@ const Header = () => {
           <img
             src={logo}
             alt="Relaya Logo"
-            className="h-16 w-auto object-contain transition-transform group-hover:scale-105"
+            className="h-24 w-auto object-contain transition-transform group-hover:scale-105"
           />
         </Link>
 

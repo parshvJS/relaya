@@ -1,4 +1,3 @@
-import { Mail, Linkedin, Twitter, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import logo from '@/assets/logo.png';
 
@@ -13,6 +12,7 @@ const Footer = () => {
     ],
     company: [
       { label: 'About', href: '/about' },
+      { label: 'Blog', href: '/blog' },
       { label: 'Contact', href: '/contact' },
     ],
     legal: [
@@ -23,13 +23,6 @@ const Footer = () => {
       { label: 'Disclaimer', href: '/disclaimer' },
     ],
   };
-
-  const socialLinks = [
-    { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Mail, href: 'mailto:contact@relaya.com', label: 'Email' },
-  ];
 
   return (
     <footer className="border-t border-border/50 bg-muted/30">
@@ -42,27 +35,12 @@ const Footer = () => {
               <img
                 src={logo}
                 alt="Relaya Logo"
-                className="h-16 w-auto object-contain"
+                className="h-24 w-auto object-contain"
               />
             </a>
-            <p className="text-sm text-muted-foreground mb-6 max-w-xs">
+            <p className="text-sm text-muted-foreground max-w-xs">
               Enterprise-grade PR services powered by AI. Generate compliance-ready content at scale.
             </p>
-            {/* Social Links */}
-            <div className="flex items-center gap-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  aria-label={social.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-9 h-9 rounded-lg bg-secondary hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <social.icon className="w-4 h-4" />
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Product Links */}

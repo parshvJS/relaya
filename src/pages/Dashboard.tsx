@@ -106,10 +106,10 @@ const Dashboard = () => {
         <div className="container flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/dashboard" className="flex items-center gap-2">
-            <img 
-              src={logo} 
-              alt="Relaya Logo" 
-              className="h-10 w-auto object-contain"
+            <img
+              src={logo}
+              alt="Relaya Logo"
+              className="h-24 w-auto object-contain"
             />
           </Link>
 

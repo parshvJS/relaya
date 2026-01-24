@@ -183,10 +183,10 @@ const Auth = () => {
         <header className="container py-6">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2 group">
-              <img 
-                src={logo} 
-                alt="Relaya Logo" 
-                className="h-10 w-auto object-contain transition-transform group-hover:scale-105"
+              <img
+                src={logo}
+                alt="Relaya Logo"
+                className="h-24 w-auto object-contain transition-transform group-hover:scale-105"
               />
             </Link>
             <Link 

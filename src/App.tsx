@@ -13,6 +13,11 @@ import Pricing from "./pages/Pricing";
 import Features from "./pages/Features";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
+import Blog from "./pages/Blog";
+import AITransformingPR from "./pages/blog/AITransformingPR";
+import PRAutomationGuide from "./pages/blog/PRAutomationGuide";
+import CrisisCommunications from "./pages/blog/CrisisCommunications";
+import ComplianceCommunications from "./pages/blog/ComplianceCommunications";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import OutreachAutopilot from "./pages/OutreachAutopilot";
@@ -52,6 +57,13 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/outreach-autopilot" element={<OutreachAutopilot />} />
+
+            {/* Blog Routes */}
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/ai-transforming-enterprise-pr-2026" element={<AITransformingPR />} />
+            <Route path="/blog/complete-guide-pr-automation" element={<PRAutomationGuide />} />
+            <Route path="/blog/crisis-communications-digital-age" element={<CrisisCommunications />} />
+            <Route path="/blog/building-compliance-ready-communications-strategy" element={<ComplianceCommunications />} />
 
             {/* Legal Routes */}
             <Route path="/privacy" element={<PrivacyPolicy />} />
