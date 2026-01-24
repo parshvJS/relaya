@@ -1,123 +1,36 @@
-import { Mail, Linkedin, Twitter, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import logo from '@/assets/logo.jpeg';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
-    product: [
-      { label: 'Services', href: '#services' },
-      { label: 'Pricing', href: '#pricing' },
-      { label: 'Features', href: '#features' },
-      { label: 'Integrations', href: '#integrations' },
-    ],
-    company: [
-      { label: 'About', href: '#about' },
-      { label: 'Blog', href: '#blog' },
-      { label: 'Careers', href: '#careers' },
-      { label: 'Contact', href: '#contact' },
-    ],
-    resources: [
-      { label: 'Documentation', href: '#docs' },
-      { label: 'Help Center', href: '#help' },
-      { label: 'API Reference', href: '#api' },
-      { label: 'Status', href: '#status' },
-    ],
     legal: [
-      { label: 'Privacy Policy', href: '#privacy' },
-      { label: 'Terms of Service', href: '#terms' },
-      { label: 'Cookie Policy', href: '#cookies' },
+      { label: 'Privacy Policy', href: '/privacy' },
+      { label: 'Terms of Service', href: '/terms' },
+      { label: 'Cookie Policy', href: '/cookies' },
+      { label: 'Acceptable Use', href: '/acceptable-use' },
+      { label: 'Disclaimer', href: '/disclaimer' },
     ],
   };
-
-  const socialLinks = [
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Github, href: '#', label: 'GitHub' },
-    { icon: Mail, href: '#', label: 'Email' },
-  ];
 
   return (
     <footer className="border-t border-border/50 bg-muted/30">
       <div className="container py-12 md:py-16">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-12">
           {/* Brand Column */}
-          <div className="col-span-2">
+          <div className="max-w-sm">
             <a href="/" className="flex items-center gap-2 mb-4">
-              <img 
-                src={logo} 
-                alt="Relaya Logo" 
+              <img
+                src={logo}
+                alt="Relaya Logo"
                 className="h-10 w-auto object-contain"
               />
             </a>
-            <p className="text-sm text-muted-foreground mb-6 max-w-xs">
+            <p className="text-sm text-muted-foreground">
               Enterprise-grade PR services powered by AI. Generate compliance-ready content at scale.
             </p>
-            {/* Social Links */}
-            <div className="flex items-center gap-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  aria-label={social.label}
-                  className="flex items-center justify-center w-9 h-9 rounded-lg bg-secondary hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <social.icon className="w-4 h-4" />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Product Links */}
-          <div>
-            <h4 className="font-semibold text-sm text-foreground mb-4">Product</h4>
-            <ul className="space-y-3">
-              {footerLinks.product.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company Links */}
-          <div>
-            <h4 className="font-semibold text-sm text-foreground mb-4">Company</h4>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources Links */}
-          <div>
-            <h4 className="font-semibold text-sm text-foreground mb-4">Resources</h4>
-            <ul className="space-y-3">
-              {footerLinks.resources.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* Legal Links */}
@@ -126,12 +39,12 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -139,10 +52,15 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            {currentYear} Relaya. All rights reserved.
-          </p>
+        <div className="pt-8 border-t border-border/50">
+          <div className="flex flex-col items-center gap-3">
+            <p className="text-sm text-muted-foreground text-center">
+              By using this website, you agree to our legal documents. Please review them in the footer.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {currentYear} Relaya. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

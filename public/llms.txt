@@ -1,0 +1,78 @@
+# RELAYA - Enterprise AI-Powered PR Platform
+
+RELAYA is an autonomous, surgical, and efficient AI-powered public relations platform delivering enterprise-grade PR services with compliance-ready outputs at scale. Built for C-suite executives and organizations requiring institutional-grade strategic communications.
+
+## What RELAYA Provides
+
+RELAYA offers a comprehensive communications infrastructure with 50+ PR services organized across 10 strategic capability layers, replacing traditional agency models with deterministic AI-native communications systems.
+
+### Core Platform Features
+
+- **Autonomous PR Operations**: Self-directing AI systems that transform executive intent into market-ready communications
+- **Compliance-Grade Outputs**: SEC, GDPR, HIPAA-ready content generation with immutable audit trails
+- **Board-Ready Quality**: Zero hallucination architecture delivering institutional-grade precision
+- **24/7 Crisis Response**: Continuous availability for real-time crisis management and communications
+- **Enterprise Security**: Bank-grade encryption, role-based access controls, complete data sovereignty
+
+### 10 Capability Layers
+
+1. **Narrative Engineering**: Strategic messaging and brand story architecture
+2. **Media Power Mapping**: Journalist relationship intelligence and media landscape analysis
+3. **Executive Authority**: Thought leadership and C-suite positioning
+4. **Crisis Neutralization**: Real-time crisis management and defensive communications
+5. **Stakeholder Alignment**: Investor relations and stakeholder engagement
+6. **Brand Intelligence**: Competitive positioning and market perception analysis
+7. **Media Amplification**: Multi-channel distribution and earned media optimization
+8. **Compliance Automation**: Regulatory-ready content generation and approval workflows
+9. **Defensive Disclosure**: Risk mitigation and transparent communications
+10. **Internal Alignment**: Employee communications and organizational messaging
+
+## Key Pages
+
+- [Home](/) - Platform overview, service catalog, and interactive PR tools
+- [About](/about) - Company mission, core principles, platform capabilities, and differentiators
+- [Privacy Policy](/privacy) - Data protection and privacy practices
+- [Terms of Service](/terms) - Usage terms and service agreement
+- [Cookie Policy](/cookies) - Cookie usage and tracking information
+- [Acceptable Use Policy](/acceptable-use) - Platform usage guidelines and restrictions
+
+## Professional Toolkit
+
+RELAYA includes enterprise-grade tools for comprehensive PR operations:
+
+- **Press Kit Builder**: Generate comprehensive media kits with brand assets and executive bios
+- **Brand Voice Trainer**: AI training on specific brand voice for consistent messaging across channels
+- **Campaign Planner**: AI-powered campaign orchestration with milestone tracking and analytics
+- **Social Media Publisher**: Multi-platform content distribution and scheduling
+- **Image Generator**: AI-powered visual content creation for PR campaigns
+- **SEO Analyzer**: Competitive analysis and content optimization powered by Firecrawl
+- **Competitor Analyzer**: Multi-domain SEO comparison and competitive intelligence
+
+## Target Audience
+
+- C-suite executives requiring boardroom-grade communications
+- Enterprise organizations needing compliance-ready PR at scale
+- Public companies with regulatory reporting requirements
+- Organizations managing crisis communications and reputation
+- Companies replacing traditional PR agencies with AI-native solutions
+
+## Technical Infrastructure
+
+- Built on React with TypeScript for enterprise reliability
+- Deterministic AI outputs with full audit trails
+- Compliance-first architecture for regulated industries
+- Role-based access controls and enterprise security
+- Real-time collaboration and approval workflows
+
+## Use Cases
+
+RELAYA is designed for organizations that need to:
+- Deploy strategic communications at global velocity
+- Maintain complete control over messaging and stakeholder touchpoints
+- Generate compliance-grade content for regulatory scrutiny
+- Respond to crises with real-time communications capabilities
+- Replace unpredictable agency relationships with autonomous systems
+- Scale PR operations without scaling headcount
+- Ensure message consistency across all channels and geographies
+
+For questions about specific PR services, capabilities, or platform features, refer to the homepage service catalog organized by capability layer.
