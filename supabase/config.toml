@@ -1,0 +1,31 @@
+project_id = "ygshxzmtqpaonvohwfru"
+
+[functions.analyze-url-seo]
+verify_jwt = false
+
+[functions.generate-press-kit]
+verify_jwt = false
+
+[functions.analyze-brand-voice]
+verify_jwt = false
+
+[functions.generate-with-voice]
+verify_jwt = false
+
+[functions.generate-campaign-tasks]
+verify_jwt = false
+
+[functions.optimize-social-content]
+verify_jwt = false
+
+[functions.generate-image]
+verify_jwt = false
+
+[functions.send-lead-notification]
+verify_jwt = false
+
+[functions.submit-contact]
+verify_jwt = false
+
+[functions.generate-pr-content]
+verify_jwt = false
