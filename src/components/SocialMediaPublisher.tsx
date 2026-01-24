@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,22 +8,23 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { toast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { 
-  Send, 
-  Settings, 
-  Copy, 
-  Sparkles, 
-  Link as LinkIcon, 
-  Check, 
+import {
+  Send,
+  Settings,
+  Copy,
+  Sparkles,
+  Link as LinkIcon,
+  Check,
   X,
   Hash,
   AtSign,
   Globe,
   FileText,
   Loader2,
-  ExternalLink
+  ExternalLink,
+  Clock
 } from 'lucide-react';
+import AIApiClient, { SSEEvent } from '@/lib/aiApiClient';
 
 interface WebhookConfig {
   id: string;
@@ -97,6 +98,21 @@ const SocialMediaPublisher = () => {
   const [optimizedContent, setOptimizedContent] = useState<Record<string, OptimizedContent>>({});
   const [activeTab, setActiveTab] = useState('compose');
   const [showSettings, setShowSettings] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState<string>('');
+  const [optimizedText, setOptimizedText] = useState<string>('');
+  const outputRef = useRef<string>('');
+
+  // Initialize AI client
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await AIApiClient.initialize();
+      } catch (error) {
+        console.error('Failed to initialize AI client:', error);
+      }
+    };
+    init();
+  }, []);
 
   const handleWebhookChange = (platformId: string, url: string) => {
     setWebhooks(prev => 
@@ -158,33 +174,79 @@ const SocialMediaPublisher = () => {
     }
 
     setIsOptimizing(true);
+    setOptimizedText('');
+    outputRef.current = '';
 
     try {
-      const { data, error } = await supabase.functions.invoke('optimize-social-content', {
-        body: {
-          content,
-          platforms: enabledPlatforms.map(p => p.platform)
+      const platformNames = enabledPlatforms.map(p => p.name).join(', ');
+      const prompt = `Optimize the following content for social media posting across multiple platforms: ${platformNames}
+
+Original Content:
+${content}
+
+Please generate platform-specific optimized versions with:
+1. Platform-appropriate content length and formatting
+2. Relevant hashtags for each platform (${platformNames})
+3. Suggested mentions and tags
+4. Engagement-optimized language
+5. Call-to-action recommendations
+6. Best posting times and strategies
+
+For each platform (${platformNames}), provide:
+- Optimized content text
+- Recommended hashtags
+- Suggested mentions
+- Metadata (title, description, keywords)
+- Platform-specific tips
+
+Format the output with clear sections for each platform.`;
+
+      setLoadingStatus('Creating social media optimization session...');
+      const session = await AIApiClient.createSession(prompt);
+
+      setLoadingStatus('Optimizing content for platforms...');
+
+      await AIApiClient.startChat(
+        { prompt, sessionId: session.sessionid },
+        (event: SSEEvent) => {
+          if (event.type === 'loadingStatus') {
+            setLoadingStatus(event.status || '');
+          } else if (event.type === 'finalResponse') {
+            if (event.content) {
+              outputRef.current += event.content;
+              setOptimizedText(outputRef.current);
+            }
+          }
+        },
+        () => {
+          setIsOptimizing(false);
+          setLoadingStatus('');
+          setActiveTab('preview');
+          toast({
+            title: "Content Optimized",
+            description: `Generated optimized content for ${enabledPlatforms.length} platform(s).`,
+          });
+        },
+        (error) => {
+          setIsOptimizing(false);
+          setLoadingStatus('');
+          toast({
+            title: "Optimization Failed",
+            description: error.message || "An error occurred during optimization.",
+            variant: "destructive",
+          });
+          console.error('Optimization error:', error);
         }
-      });
-
-      if (error) throw error;
-
-      setOptimizedContent(data.optimized || {});
-      setActiveTab('preview');
-      
-      toast({
-        title: "Content Optimized",
-        description: `Generated optimized content for ${enabledPlatforms.length} platform(s).`,
-      });
+      );
     } catch (error) {
       console.error('Optimization error:', error);
+      setIsOptimizing(false);
+      setLoadingStatus('');
       toast({
         title: "Optimization Failed",
         description: error instanceof Error ? error.message : "An error occurred during optimization.",
         variant: "destructive",
       });
-    } finally {
-      setIsOptimizing(false);
     }
   };
 
@@ -389,7 +451,29 @@ const SocialMediaPublisher = () => {
               </p>
             </div>
 
-            <Button 
+            {/* Loading Status */}
+            {isOptimizing && (
+              <div className="space-y-3">
+                {loadingStatus && (
+                  <div className="p-3 rounded-lg border border-border bg-muted/30">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                      <span className="text-sm font-medium">{loadingStatus}</span>
+                    </div>
+                  </div>
+                )}
+                <div className="p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                  <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                    <Clock className="w-4 h-4" />
+                    <span className="text-xs font-medium">
+                      Processing time: 10-15 minutes for platform optimization
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <Button
               onClick={optimizeForPlatforms}
               disabled={isOptimizing || !content.trim() || enabledCount === 0}
               className="w-full gap-2"
@@ -409,12 +493,43 @@ const SocialMediaPublisher = () => {
           </TabsContent>
 
           <TabsContent value="preview" className="space-y-4">
-            {Object.keys(optimizedContent).length === 0 ? (
+            {!optimizedText && Object.keys(optimizedContent).length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <Sparkles className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>No optimized content yet.</p>
                 <p className="text-sm">Compose content and click "Optimize" to generate platform-specific versions.</p>
               </div>
+            ) : optimizedText ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    Optimized Social Media Content
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-muted/30 rounded-lg p-6 prose prose-sm max-w-none">
+                    <pre className="whitespace-pre-wrap font-sans text-sm text-foreground leading-relaxed">
+                      {optimizedText}
+                    </pre>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-4"
+                    onClick={() => {
+                      navigator.clipboard.writeText(optimizedText);
+                      toast({
+                        title: "Copied!",
+                        description: "Optimized content copied to clipboard.",
+                      });
+                    }}
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy All Content
+                  </Button>
+                </CardContent>
+              </Card>
             ) : (
               <>
                 {webhooks.filter(w => w.enabled && optimizedContent[w.platform]).map(webhook => {

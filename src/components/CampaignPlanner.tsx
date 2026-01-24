@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Calendar, Plus, Trash2, Edit2, CheckCircle, Clock, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,8 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import AIApiClient, { SSEEvent } from '@/lib/aiApiClient';
 
 interface Campaign {
   id: string;
@@ -37,6 +37,9 @@ const CampaignPlanner = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState<string>('');
+  const [generatedTasksText, setGeneratedTasksText] = useState<string>('');
+  const outputRef = useRef<string>('');
   const [newCampaign, setNewCampaign] = useState<Partial<Campaign>>({
     name: '',
     description: '',
@@ -49,6 +52,18 @@ const CampaignPlanner = () => {
     channels: [],
     tasks: [],
   });
+
+  // Initialize AI client
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await AIApiClient.initialize();
+      } catch (error) {
+        console.error('Failed to initialize AI client:', error);
+      }
+    };
+    init();
+  }, []);
 
   const campaignTypes = [
     { value: 'product-launch', label: 'Product Launch' },
@@ -95,27 +110,67 @@ const CampaignPlanner = () => {
     }
 
     setIsGenerating(true);
+    setGeneratedTasksText('');
+    outputRef.current = '';
+
     try {
-      const { data, error } = await supabase.functions.invoke('generate-campaign-tasks', {
-        body: { 
-          campaignName: newCampaign.name,
-          campaignType: newCampaign.type,
-          startDate: newCampaign.startDate,
-          endDate: newCampaign.endDate,
-          objectives: newCampaign.objectives,
-          channels: newCampaign.channels,
+      const prompt = `Generate a comprehensive PR campaign plan with detailed tasks for:
+
+Campaign Name: ${newCampaign.name}
+Campaign Type: ${newCampaign.type}
+Start Date: ${newCampaign.startDate}
+End Date: ${newCampaign.endDate}
+${newCampaign.objectives ? `Objectives: ${newCampaign.objectives}` : ''}
+${newCampaign.targetAudience ? `Target Audience: ${newCampaign.targetAudience}` : ''}
+${newCampaign.channels && newCampaign.channels.length > 0 ? `Channels: ${newCampaign.channels.join(', ')}` : ''}
+${newCampaign.description ? `Description: ${newCampaign.description}` : ''}
+
+Please generate:
+1. Detailed task breakdown with specific actionable items
+2. Timeline and milestone schedule
+3. Resource requirements and team assignments
+4. Success metrics and KPIs
+5. Risk assessment and contingency plans
+6. Budget considerations
+7. Communication strategy across channels
+8. Content calendar and deliverables
+
+Format the output as a structured campaign plan with clear sections and actionable tasks.`;
+
+      setLoadingStatus('Creating campaign planning session...');
+      const session = await AIApiClient.createSession(prompt);
+
+      setLoadingStatus('Generating campaign tasks and strategy...');
+
+      await AIApiClient.startChat(
+        { prompt, sessionId: session.sessionid },
+        (event: SSEEvent) => {
+          if (event.type === 'loadingStatus') {
+            setLoadingStatus(event.status || '');
+          } else if (event.type === 'finalResponse') {
+            if (event.content) {
+              outputRef.current += event.content;
+              setGeneratedTasksText(outputRef.current);
+            }
+          }
+        },
+        () => {
+          setIsGenerating(false);
+          setLoadingStatus('');
+          toast.success('Campaign plan generated successfully');
+        },
+        (error) => {
+          setIsGenerating(false);
+          setLoadingStatus('');
+          toast.error('Failed to generate campaign tasks');
+          console.error('Error generating tasks:', error);
         }
-      });
-
-      if (error) throw error;
-
-      setNewCampaign(prev => ({ ...prev, tasks: data.tasks }));
-      toast.success('Campaign tasks generated successfully');
+      );
     } catch (error) {
       console.error('Error generating tasks:', error);
       toast.error('Failed to generate campaign tasks');
-    } finally {
       setIsGenerating(false);
+      setLoadingStatus('');
     }
   };
 
@@ -312,7 +367,7 @@ const CampaignPlanner = () => {
 
               <div className="border-t border-border pt-4">
                 <div className="flex items-center justify-between mb-3">
-                  <Label>Campaign Tasks</Label>
+                  <Label>Campaign Tasks & Strategy</Label>
                   <Button
                     type="button"
                     variant="outline"
@@ -328,30 +383,46 @@ const CampaignPlanner = () => {
                     ) : (
                       <>
                         <Sparkles className="w-4 h-4" />
-                        Auto-Generate Tasks
+                        Auto-Generate Plan
                       </>
                     )}
                   </Button>
                 </div>
-                {newCampaign.tasks && newCampaign.tasks.length > 0 ? (
-                  <div className="space-y-2 max-h-[200px] overflow-y-auto">
-                    {newCampaign.tasks.map((task, i) => (
-                      <div key={i} className="flex items-center justify-between bg-muted/30 rounded-lg px-3 py-2">
-                        <div>
-                          <p className="text-sm font-medium text-foreground">{task.title}</p>
-                          <p className="text-xs text-muted-foreground">Due: {task.dueDate}</p>
+
+                {/* Loading Status */}
+                {isGenerating && (
+                  <div className="space-y-3 mb-4">
+                    {loadingStatus && (
+                      <div className="p-3 rounded-lg border border-border bg-muted/30">
+                        <div className="flex items-center gap-2">
+                          <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                          <span className="text-sm font-medium">{loadingStatus}</span>
                         </div>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                          {task.status}
+                      </div>
+                    )}
+                    <div className="p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                      <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-xs font-medium">
+                          Processing time: 10-15 minutes for comprehensive campaign plan
                         </span>
                       </div>
-                    ))}
+                    </div>
                   </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground italic">
-                    Click "Auto-Generate Tasks" to create a task timeline
-                  </p>
                 )}
+
+                {/* Generated Campaign Plan */}
+                {generatedTasksText && !isGenerating ? (
+                  <div className="bg-muted/30 rounded-lg p-4 max-h-[300px] overflow-y-auto">
+                    <pre className="whitespace-pre-wrap font-sans text-sm text-foreground leading-relaxed">
+                      {generatedTasksText}
+                    </pre>
+                  </div>
+                ) : !isGenerating && !generatedTasksText ? (
+                  <p className="text-sm text-muted-foreground italic">
+                    Click "Auto-Generate Plan" to create a comprehensive campaign strategy
+                  </p>
+                ) : null}
               </div>
 
               <div className="flex justify-end gap-3 pt-4">

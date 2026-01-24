@@ -1,12 +1,11 @@
-import { useState } from 'react';
-import { Plus, X, Loader2, AlertCircle, Trophy, TrendingUp, Target, BarChart3 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Plus, X, Loader2, AlertCircle, Trophy, TrendingUp, Target, BarChart3, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import SeoPreview from './SeoPreview';
+import AIApiClient, { SSEEvent } from '@/lib/aiApiClient';
 
 interface AnalysisResult {
   url: string;
@@ -25,9 +24,22 @@ interface AnalysisResult {
 const CompetitorAnalyzer = () => {
   const [urls, setUrls] = useState<string[]>(['', '']);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [results, setResults] = useState<AnalysisResult[]>([]);
-  const [activeTab, setActiveTab] = useState('0');
+  const [analysisResult, setAnalysisResult] = useState<string>('');
+  const [loadingStatus, setLoadingStatus] = useState<string>('');
+  const outputRef = useRef<string>('');
   const { toast } = useToast();
+
+  // Initialize AI client
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await AIApiClient.initialize();
+      } catch (error) {
+        console.error('Failed to initialize AI client:', error);
+      }
+    };
+    init();
+  }, []);
 
   const addUrl = () => {
     if (urls.length < 5) {
@@ -49,7 +61,7 @@ const CompetitorAnalyzer = () => {
 
   const handleAnalyze = async () => {
     const validUrls = urls.filter(url => url.trim());
-    
+
     if (validUrls.length < 2) {
       toast({
         title: "More URLs Required",
@@ -60,76 +72,112 @@ const CompetitorAnalyzer = () => {
     }
 
     setIsAnalyzing(true);
-    setResults([]);
+    setAnalysisResult('');
+    outputRef.current = '';
 
     try {
-      // Analyze all URLs in parallel
-      const analysisPromises = validUrls.map(async (url) => {
-        try {
-          const { data, error } = await supabase.functions.invoke('analyze-url-seo', {
-            body: { url: url.trim() },
+      const urlList = validUrls.map((url, idx) => `${idx + 1}. ${url.trim()}`).join('\n');
+
+      const prompt = `Perform a comprehensive competitive analysis comparing the following ${validUrls.length} competitor websites:
+
+${urlList}
+
+Please provide a detailed competitive analysis including:
+
+1. **Overview Comparison**
+   - Brief description of each competitor
+   - Primary target audience
+   - Key value propositions
+   - Market positioning
+
+2. **SEO & Content Strategy Comparison**
+   - Content quality and depth
+   - Keyword targeting strategies
+   - Content freshness and update frequency
+   - On-page SEO implementation
+   - Meta tags and schema markup
+
+3. **Technical SEO Comparison**
+   - Page speed and performance
+   - Mobile optimization
+   - Site structure and navigation
+   - Internal linking strategy
+   - Technical implementation quality
+
+4. **Competitive Strengths & Weaknesses**
+   For each competitor:
+   - Top 3 strengths
+   - Top 3 weaknesses
+   - Unique differentiators
+   - Areas of vulnerability
+
+5. **Market Opportunities**
+   - Content gaps to exploit
+   - Keyword opportunities
+   - Areas where competitors are weak
+   - Differentiation strategies
+
+6. **Recommendations**
+   - How to outrank each competitor
+   - Quick wins and long-term strategies
+   - Content topics to prioritize
+   - Technical improvements needed
+
+7. **Competitive Scoring** (Rate each on scale of 1-10)
+   - Overall SEO strength
+   - Content quality
+   - Technical implementation
+   - User experience
+   - Brand authority
+
+Format the output with clear sections and actionable insights for each competitor.`;
+
+      setLoadingStatus('Creating competitive analysis session...');
+      const session = await AIApiClient.createSession(prompt);
+
+      setLoadingStatus('Analyzing competitors and generating comparison...');
+
+      await AIApiClient.startChat(
+        { prompt, sessionId: session.sessionid },
+        (event: SSEEvent) => {
+          if (event.type === 'loadingStatus') {
+            setLoadingStatus(event.status || '');
+          } else if (event.type === 'finalResponse') {
+            if (event.content) {
+              outputRef.current += event.content;
+              setAnalysisResult(outputRef.current);
+            }
+          }
+        },
+        () => {
+          setIsAnalyzing(false);
+          setLoadingStatus('');
+          toast({
+            title: "Analysis Complete",
+            description: `Successfully analyzed ${validUrls.length} competitors`,
           });
-
-          if (error) {
-            return { url, success: false, error: error.message };
-          }
-
-          if (!data.success) {
-            return { url, success: false, error: data.error };
-          }
-
-          return {
-            url: data.url,
-            success: true,
-            metadata: data.metadata,
-            linksCount: data.linksCount,
-            contentLength: data.contentLength,
-            analysis: data.analysis,
-          };
-        } catch (err) {
-          return {
-            url,
-            success: false,
-            error: err instanceof Error ? err.message : 'Analysis failed',
-          };
+        },
+        (error) => {
+          setIsAnalyzing(false);
+          setLoadingStatus('');
+          toast({
+            title: "Analysis Failed",
+            description: error.message || "An error occurred during analysis",
+            variant: "destructive",
+          });
         }
-      });
-
-      const analysisResults = await Promise.all(analysisPromises);
-      setResults(analysisResults);
-      setActiveTab('0');
-
-      const successCount = analysisResults.filter(r => r.success).length;
-      toast({
-        title: "Analysis Complete",
-        description: `Successfully analyzed ${successCount} of ${validUrls.length} URLs`,
-      });
+      );
     } catch (err) {
+      setIsAnalyzing(false);
+      setLoadingStatus('');
       toast({
         title: "Analysis Failed",
         description: "An error occurred during analysis",
         variant: "destructive",
       });
-    } finally {
-      setIsAnalyzing(false);
     }
   };
 
-  const getComparisonStats = () => {
-    const successfulResults = results.filter(r => r.success);
-    if (successfulResults.length === 0) return null;
-
-    return successfulResults.map(r => ({
-      url: r.url,
-      domain: new URL(r.url).hostname.replace('www.', ''),
-      contentLength: r.contentLength || 0,
-      linksCount: r.linksCount || 0,
-      title: r.metadata?.title || 'N/A',
-      hasDescription: !!r.metadata?.description,
-    }));
-  };
-
-  const stats = getComparisonStats();
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
@@ -202,147 +250,45 @@ const CompetitorAnalyzer = () => {
             </Button>
           </div>
 
+          {/* Loading Status */}
           {isAnalyzing && (
-            <div className="text-center py-8 border-t border-border mt-4">
-              <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary mb-3" />
-              <p className="text-sm text-muted-foreground">
-                Scraping and analyzing multiple pages...
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                This may take 30-60 seconds for all URLs
-              </p>
+            <div className="space-y-3 border-t border-border mt-4 pt-4">
+              {loadingStatus && (
+                <div className="p-3 rounded-lg border border-border bg-muted/30">
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                    <span className="text-sm font-medium">{loadingStatus}</span>
+                  </div>
+                </div>
+              )}
+              <div className="p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                  <Clock className="w-4 h-4" />
+                  <span className="text-xs font-medium">
+                    Processing time: 10-15 minutes for comprehensive competitive analysis
+                  </span>
+                </div>
+              </div>
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Comparison Overview */}
-      {stats && stats.length > 0 && !isAnalyzing && (
+      {/* Competitive Analysis Results */}
+      {analysisResult && !isAnalyzing && (
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-primary" />
-              Quick Comparison
+              <Trophy className="w-5 h-5 text-primary" />
+              Competitive Analysis Results
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-3 px-2 font-medium text-muted-foreground">Metric</th>
-                    {stats.map((s, i) => (
-                      <th key={i} className="text-center py-3 px-2 font-medium">
-                        <span className="text-foreground">{s.domain}</span>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-border/50">
-                    <td className="py-3 px-2 text-muted-foreground">Content Length</td>
-                    {stats.map((s, i) => {
-                      const max = Math.max(...stats.map(st => st.contentLength));
-                      const isMax = s.contentLength === max;
-                      return (
-                        <td key={i} className={`text-center py-3 px-2 ${isMax ? 'text-primary font-medium' : ''}`}>
-                          {s.contentLength.toLocaleString()} chars
-                          {isMax && <Trophy className="w-3 h-3 inline ml-1 text-primary" />}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                  <tr className="border-b border-border/50">
-                    <td className="py-3 px-2 text-muted-foreground">Internal Links</td>
-                    {stats.map((s, i) => {
-                      const max = Math.max(...stats.map(st => st.linksCount));
-                      const isMax = s.linksCount === max;
-                      return (
-                        <td key={i} className={`text-center py-3 px-2 ${isMax ? 'text-primary font-medium' : ''}`}>
-                          {s.linksCount} links
-                          {isMax && <Trophy className="w-3 h-3 inline ml-1 text-primary" />}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                  <tr className="border-b border-border/50">
-                    <td className="py-3 px-2 text-muted-foreground">Has Meta Description</td>
-                    {stats.map((s, i) => (
-                      <td key={i} className={`text-center py-3 px-2 ${s.hasDescription ? 'text-green-600' : 'text-red-500'}`}>
-                        {s.hasDescription ? '✓ Yes' : '✗ Missing'}
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-2 text-muted-foreground">Title Tag</td>
-                    {stats.map((s, i) => (
-                      <td key={i} className="text-center py-3 px-2 text-xs max-w-[200px] truncate" title={s.title}>
-                        {s.title.length > 30 ? s.title.substring(0, 30) + '...' : s.title}
-                      </td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
+            <div className="bg-muted/30 rounded-lg p-6 prose prose-sm max-w-none">
+              <pre className="whitespace-pre-wrap font-sans text-sm text-foreground leading-relaxed">
+                {analysisResult}
+              </pre>
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Detailed Results Tabs */}
-      {results.length > 0 && !isAnalyzing && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Target className="w-5 h-5 text-primary" />
-              Detailed Analysis
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="w-full flex flex-wrap h-auto gap-1 mb-4">
-                {results.map((result, index) => {
-                  const domain = result.success 
-                    ? new URL(result.url).hostname.replace('www.', '')
-                    : `URL ${index + 1}`;
-                  return (
-                    <TabsTrigger
-                      key={index}
-                      value={index.toString()}
-                      className="flex-1 min-w-[120px] text-xs"
-                    >
-                      <span className={`w-2 h-2 rounded-full mr-2 ${result.success ? 'bg-green-500' : 'bg-red-500'}`} />
-                      {domain.length > 15 ? domain.substring(0, 15) + '...' : domain}
-                    </TabsTrigger>
-                  );
-                })}
-              </TabsList>
-
-              {results.map((result, index) => (
-                <TabsContent key={index} value={index.toString()} className="mt-0">
-                  {result.success ? (
-                    <div>
-                      <div className="flex gap-4 text-sm text-muted-foreground mb-4 pb-4 border-b border-border">
-                        <span>📄 {result.contentLength?.toLocaleString()} characters</span>
-                        <span>🔗 {result.linksCount} links</span>
-                        {result.metadata?.language && (
-                          <span>🌐 {result.metadata.language.toUpperCase()}</span>
-                        )}
-                      </div>
-                      <SeoPreview content={result.analysis || ''} />
-                    </div>
-                  ) : (
-                    <div className="p-6 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-3">
-                      <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="font-medium text-destructive">Analysis Failed</p>
-                        <p className="text-sm text-muted-foreground mt-1">{result.error}</p>
-                        <p className="text-xs text-muted-foreground mt-2">URL: {result.url}</p>
-                      </div>
-                    </div>
-                  )}
-                </TabsContent>
-              ))}
-            </Tabs>
           </CardContent>
         </Card>
       )}

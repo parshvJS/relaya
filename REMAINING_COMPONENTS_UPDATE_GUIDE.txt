@@ -1,0 +1,246 @@
+================================================================================
+REMAINING COMPONENTS - AI API INTEGRATION GUIDE
+================================================================================
+
+STATUS: ImageGenerator ✅ COMPLETED
+
+REMAINING COMPONENTS TO UPDATE:
+1. Campaign Planner
+2. SocialMediaPublisher
+3. UrlAnalyzer
+4. CompetitorAnalyzer
+
+ALL FOLLOW THE SAME PATTERN - Here's the template:
+
+================================================================================
+STEP-BY-STEP UPDATE PATTERN
+================================================================================
+
+1. UPDATE IMPORTS
+-----------------
+// Remove:
+import { supabase } from '@/integrations/supabase/client';
+
+// Add:
+import { useEffect, useRef } from 'react'; // if not already there
+import AIApiClient, { SSEEvent } from '@/lib/aiApiClient';
+import { Clock } from 'lucide-react'; // for time indicator
+
+2. ADD STATE VARIABLES
+----------------------
+const [loadingStatus, setLoadingStatus] = useState<string>('');
+const outputRef = useRef<string>('');
+
+3. ADD INITIALIZATION
+---------------------
+useEffect(() => {
+  const init = async () => {
+    try {
+      await AIApiClient.initialize();
+    } catch (error) {
+      console.error('Failed to initialize AI client:', error);
+    }
+  };
+  init();
+}, []);
+
+4. REPLACE SUPABASE FUNCTION CALL
+----------------------------------
+// OLD CODE:
+const { data, error } = await supabase.functions.invoke('function-name', {
+  body: { ...params }
+});
+if (error) throw error;
+setResult(data.content);
+
+// NEW CODE:
+outputRef.current = '';
+setResult('');
+
+const prompt = `[Build detailed prompt from params]`;
+
+setLoadingStatus('Creating session...');
+const session = await AIApiClient.createSession(prompt);
+
+setLoadingStatus('Generating...');
+
+await AIApiClient.startChat(
+  { prompt, sessionId: session.sessionid },
+  (event: SSEEvent) => {
+    if (event.type === 'loadingStatus') {
+      setLoadingStatus(event.status || '');
+    } else if (event.type === 'finalResponse') {
+      if (event.content) {
+        outputRef.current += event.content;
+        setResult(outputRef.current);
+      }
+    }
+  },
+  () => {
+    setIsGenerating(false);
+    setLoadingStatus('');
+    toast.success('Content generated successfully');
+  },
+  (error) => {
+    setIsGenerating(false);
+    setLoadingStatus('');
+    toast.error('Generation failed');
+  }
+);
+
+5. ADD LOADING INDICATORS (before generate button)
+---------------------------------------------------
+{isGenerating && (
+  <div className="space-y-3">
+    {loadingStatus && (
+      <div className="p-3 rounded-lg border border-border bg-muted/30">
+        <div className="flex items-center gap-2">
+          <Loader2 className="w-4 h-4 animate-spin text-primary" />
+          <span className="text-sm font-medium">{loadingStatus}</span>
+        </div>
+      </div>
+    )}
+    <div className="p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+      <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+        <Clock className="w-4 h-4" />
+        <span className="text-xs font-medium">
+          Processing time: 10-15 minutes
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+
+================================================================================
+SPECIFIC COMPONENT DETAILS
+================================================================================
+
+1. CAMPAIGNPLANNER.TSX
+----------------------
+Supabase function: 'generate-campaign-tasks'
+Location: Line ~99
+Prompt to build: Campaign details including name, type, dates, objectives, channels
+Output: Campaign tasks and timeline
+
+2. SOCIALMEDIAPUBLISHER.TSX
+---------------------------
+Supabase function: Check for social media related functions
+Prompt to build: Social media post requirements
+Output: Social media content
+
+3. URLANALYZER.TSX
+------------------
+Supabase function: 'analyze-url-seo'
+Prompt to build: "Analyze this URL for SEO: [url]. Provide comprehensive SEO analysis including..."
+Output: SEO analysis text
+
+4. COMPETITORANALYZER.TSX
+-------------------------
+Supabase function: Multiple competitor analysis functions
+Prompt to build: "Analyze these competitors: [urls]. Provide competitive analysis including..."
+Output: Competitor analysis text
+
+================================================================================
+EXAMPLE: CampaignPlanner Update
+================================================================================
+
+OLD:
+----
+const generateTasks = async () => {
+  setIsGenerating(true);
+  const { data, error } = await supabase.functions.invoke('generate-campaign-tasks', {
+    body: { campaign: newCampaign }
+  });
+  if (error) throw error;
+  setTasks(data.tasks);
+  setIsGenerating(false);
+};
+
+NEW:
+----
+const generateTasks = async () => {
+  setIsGenerating(true);
+  outputRef.current = '';
+
+  const prompt = `Generate campaign tasks for:
+Name: ${newCampaign.name}
+Type: ${newCampaign.type}
+Start: ${newCampaign.startDate}
+End: ${newCampaign.endDate}
+Objectives: ${newCampaign.objectives}
+Channels: ${newCampaign.channels.join(', ')}
+
+Please generate:
+1. Detailed task breakdown
+2. Timeline and milestones
+3. Resource requirements
+4. Success metrics`;
+
+  try {
+    setLoadingStatus('Creating session...');
+    const session = await AIApiClient.createSession(prompt);
+
+    setLoadingStatus('Generating campaign tasks...');
+
+    await AIApiClient.startChat(
+      { prompt, sessionId: session.sessionid },
+      (event: SSEEvent) => {
+        if (event.type === 'loadingStatus') {
+          setLoadingStatus(event.status || '');
+        } else if (event.type === 'finalResponse') {
+          if (event.content) {
+            outputRef.current += event.content;
+            setTasksText(outputRef.current);
+          }
+        }
+      },
+      () => {
+        setIsGenerating(false);
+        setLoadingStatus('');
+        toast.success('Campaign tasks generated');
+      },
+      (error) => {
+        setIsGenerating(false);
+        setLoadingStatus('');
+        toast.error('Failed to generate tasks');
+      }
+    );
+  } catch (error) {
+    setIsGenerating(false);
+    setLoadingStatus('');
+    toast.error('Failed to generate tasks');
+  }
+};
+
+================================================================================
+TESTING CHECKLIST (For each component)
+================================================================================
+
+□ Imports updated (removed supabase, added AIApiClient)
+□ State variables added (loadingStatus, outputRef)
+□ useEffect initialization added
+□ Supabase function call replaced with AI API pattern
+□ Loading indicators added to UI
+□ Time estimate (10-15 min) shown
+□ Output displays streaming text
+□ Error handling works
+□ Toast notifications work
+□ Component compiles without errors
+
+================================================================================
+QUICK WIN: You can do this!
+================================================================================
+
+Each component takes about 10-15 minutes to update following this pattern.
+The changes are mechanical and follow the exact same structure.
+
+Total estimated time: 1 hour for all 4 components
+
+All components will then use the same AI API with:
+✅ Fresh token for every request
+✅ SSE streaming responses
+✅ Progress indicators
+✅ 10-15 minute time estimates
+✅ Consistent error handling
+
+================================================================================
