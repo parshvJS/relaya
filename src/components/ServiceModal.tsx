@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { X, Loader2, CheckCircle, Copy, FileDown, FileText, File, Sparkles } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { X, Loader2, CheckCircle, Copy, FileDown, FileText, File, Sparkles, Upload, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,18 +18,19 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { getLayerColor, type PRService, type ServiceInput } from '@/data/prServices';
 import { getServiceIcon } from '@/data/serviceIcons';
 import { exportToPDF, exportToWord, generateFilename } from '@/lib/exportContent';
 import FileUpload from './FileUpload';
 import SeoPreview from './SeoPreview';
+import AIApiClient, { SSEEvent } from '@/lib/aiApiClient';
 
 interface UploadedFile {
   name: string;
   type: string;
   size: number;
   content: string;
+  file?: File; // Original File object for API uploads
 }
 
 interface ServiceModalProps {
@@ -45,7 +46,32 @@ const ServiceModal = ({ service, onClose }: ServiceModalProps) => {
   const [output, setOutput] = useState<string | null>(null);
   const [seoOptimization, setSeoOptimization] = useState(false);
 
+  // AI Session state
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState<string>('');
+  const [fileUploadProgress, setFileUploadProgress] = useState<{ current: number; total: number; fileName: string } | null>(null);
+  const [swarmIds, setSwarmIds] = useState<number[]>([]);
+  const outputRef = useRef<string>('');
+
   const Icon = getServiceIcon(service.id);
+
+  // Initialize AI client on mount
+  useEffect(() => {
+    const initializeAI = async () => {
+      try {
+        await AIApiClient.initialize();
+      } catch (error) {
+        console.error('Failed to initialize AI client:', error);
+        toast({
+          title: 'Initialization Error',
+          description: 'Failed to initialize AI service. Please refresh and try again.',
+          variant: 'destructive',
+        });
+      }
+    };
+
+    initializeAI();
+  }, [toast]);
 
   const handleInputChange = (name: string, value: any) => {
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -67,37 +93,140 @@ const ServiceModal = ({ service, onClose }: ServiceModalProps) => {
 
     setIsGenerating(true);
     setOutput(null);
+    outputRef.current = '';
+    setSwarmIds([]);
 
     try {
-      // Prepare file context for AI
-      const fileContext = uploadedFiles.length > 0 
-        ? uploadedFiles.map(f => `--- File: ${f.name} ---\n${f.content}`).join('\n\n')
-        : null;
+      setLoadingStatus('Initializing AI session...');
 
-      const { data, error } = await supabase.functions.invoke('generate-pr-content', {
-        body: { 
-          serviceId: service.id,
-          serviceName: service.name,
-          inputs: formData,
-          outputs: service.outputs,
-          fileContext: fileContext,
-          seoOptimization: seoOptimization,
-        },
+      // Build comprehensive prompt from form data
+      let prompt = `Service: ${service.name}\n\n`;
+      prompt += `Description: ${service.description}\n\n`;
+
+      // Add form inputs
+      prompt += `Input Parameters:\n`;
+      service.inputs.forEach(input => {
+        const value = formData[input.name];
+        if (value) {
+          if (Array.isArray(value)) {
+            prompt += `- ${input.label}: ${value.join(', ')}\n`;
+          } else {
+            prompt += `- ${input.label}: ${value}\n`;
+          }
+        }
       });
 
-      if (error) throw error;
+      // Add SEO optimization instruction
+      if (seoOptimization) {
+        prompt += `\nSEO Optimization: Enable advanced SEO, LLMO (Large Language Model Optimization), and AIO (AI Overviews) optimization. Include meta tags, schema markup, FAQ structures, and content optimized for Google, ChatGPT, Perplexity, and other AI search engines.\n`;
+      }
 
-      setOutput(data.content);
-      toast({ title: 'Content Generated', description: 'Your PR content is ready!' });
+      // Add expected outputs
+      prompt += `\nExpected Outputs:\n`;
+      service.outputs.forEach((output, idx) => {
+        prompt += `${idx + 1}. ${output}\n`;
+      });
+
+      // Add file context if files uploaded
+      if (uploadedFiles.length > 0) {
+        prompt += `\nReference Documents:\n`;
+        uploadedFiles.forEach(file => {
+          prompt += `- ${file.name} (${(file.size / 1024).toFixed(2)} KB)\n`;
+        });
+      }
+
+      prompt += `\nPlease generate comprehensive, high-quality PR content based on the above parameters. Ensure compliance with all regulatory requirements and follow industry best practices.`;
+
+      // Create session
+      setLoadingStatus('Creating session...');
+      const session = await AIApiClient.createSession(prompt);
+      setSessionId(session.sessionid);
+
+      // Upload files sequentially if any
+      if (uploadedFiles.length > 0) {
+        setLoadingStatus('Uploading documents...');
+
+        // Filter to get only files with the original File object
+        const fileObjects = uploadedFiles
+          .filter(uf => uf.file)
+          .map(uf => uf.file!);
+
+        if (fileObjects.length > 0) {
+          await AIApiClient.vectorizeDocuments(
+            session.sessionid,
+            fileObjects,
+            (current, total, fileName) => {
+              setFileUploadProgress({ current, total, fileName });
+              setLoadingStatus(`Uploading ${fileName} (${current}/${total})...`);
+            }
+          );
+        } else if (uploadedFiles.length > 0) {
+          // Fallback: if no File objects stored, log warning
+          console.warn('No file objects available for upload. Files may have been loaded incorrectly.');
+          toast({
+            title: 'File Upload Warning',
+            description: 'Some files could not be uploaded. Please try re-uploading them.',
+            variant: 'destructive',
+          });
+        }
+
+        setFileUploadProgress(null);
+      }
+
+      // Start chat
+      setLoadingStatus('Starting AI agents...');
+
+      await AIApiClient.startChat(
+        {
+          prompt,
+          sessionId: session.sessionid,
+        },
+        (event: SSEEvent) => {
+          // Handle SSE events
+          if (event.type === 'loadingStatus') {
+            setLoadingStatus(event.status || '');
+          } else if (event.type === 'swarmId') {
+            if (event.swarmId) {
+              setSwarmIds(prev => [...prev, event.swarmId!]);
+            }
+          } else if (event.type === 'finalResponse') {
+            // Append streaming response
+            if (event.content) {
+              outputRef.current += event.content;
+              setOutput(outputRef.current);
+            }
+          }
+        },
+        () => {
+          // On complete
+          setIsGenerating(false);
+          setLoadingStatus('Complete');
+          toast({
+            title: 'Content Generated',
+            description: `Your PR content is ready! Processed by ${swarmIds.length} AI agents.`
+          });
+        },
+        (error) => {
+          // On error
+          setIsGenerating(false);
+          setLoadingStatus('');
+          toast({
+            title: 'Generation Failed',
+            description: error.message || 'Please try again.',
+            variant: 'destructive',
+          });
+        }
+      );
+
     } catch (error: any) {
       console.error('Generation error:', error);
+      setIsGenerating(false);
+      setLoadingStatus('');
       toast({
         title: 'Generation Failed',
         description: error.message || 'Please try again.',
         variant: 'destructive',
       });
-    } finally {
-      setIsGenerating(false);
     }
   };
 
@@ -291,6 +420,59 @@ const ServiceModal = ({ service, onClose }: ServiceModalProps) => {
               />
             </div>
             
+            {/* Progress Indicators */}
+            {isGenerating && (
+              <div className="space-y-3">
+                {/* File Upload Progress */}
+                {fileUploadProgress && (
+                  <div className="p-3 rounded-lg border border-border bg-muted/30">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Upload className="w-4 h-4 text-primary animate-pulse" />
+                      <span className="text-sm font-medium">Uploading Files</span>
+                    </div>
+                    <div className="text-xs text-muted-foreground mb-2">
+                      {fileUploadProgress.fileName} ({fileUploadProgress.current}/{fileUploadProgress.total})
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div
+                        className="bg-primary h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${(fileUploadProgress.current / fileUploadProgress.total) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Loading Status */}
+                {loadingStatus && (
+                  <div className="p-3 rounded-lg border border-border bg-muted/30">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                      <span className="text-sm font-medium">{loadingStatus}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Time Estimate */}
+                <div className="p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                  <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                    <Clock className="w-4 h-4" />
+                    <span className="text-xs font-medium">
+                      Processing time: 10-15 minutes for comprehensive analysis
+                    </span>
+                  </div>
+                </div>
+
+                {/* Swarm Activity */}
+                {swarmIds.length > 0 && (
+                  <div className="p-3 rounded-lg border border-border bg-muted/30">
+                    <div className="text-xs text-muted-foreground">
+                      Active AI agents: {swarmIds.length}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             <Button onClick={handleGenerate} disabled={isGenerating} className="w-full btn-primary">
               {isGenerating ? (
                 <>

@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { FileText, Download, Building2, User, Globe, Image, Loader2, CheckCircle } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { FileText, Download, Building2, User, Globe, Image, Loader2, CheckCircle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { jsPDF } from 'jspdf';
+import AIApiClient, { SSEEvent } from '@/lib/aiApiClient';
 
 interface PressKitData {
   companyName: string;
@@ -33,6 +33,8 @@ interface PressKitData {
 const PressKitBuilder = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedKit, setGeneratedKit] = useState<string | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState<string>('');
+  const outputRef = useRef<string>('');
   const [data, setData] = useState<PressKitData>({
     companyName: '',
     tagline: '',
@@ -53,6 +55,18 @@ const PressKitBuilder = () => {
     mediaPhone: '',
   });
 
+  // Initialize AI client
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await AIApiClient.initialize();
+      } catch (error) {
+        console.error('Failed to initialize AI client:', error);
+      }
+    };
+    init();
+  }, []);
+
   const updateField = (field: keyof PressKitData, value: string) => {
     setData(prev => ({ ...prev, [field]: value }));
   };
@@ -64,20 +78,84 @@ const PressKitBuilder = () => {
     }
 
     setIsGenerating(true);
+    setGeneratedKit(null);
+    outputRef.current = '';
+
     try {
-      const { data: response, error } = await supabase.functions.invoke('generate-press-kit', {
-        body: { pressKitData: data }
-      });
+      // Build comprehensive prompt
+      let prompt = `Generate a comprehensive professional press kit for the following company:\n\n`;
+      prompt += `Company Name: ${data.companyName}\n`;
+      if (data.tagline) prompt += `Tagline: ${data.tagline}\n`;
+      prompt += `\nCompany Overview:\n${data.boilerplate}\n\n`;
 
-      if (error) throw error;
+      if (data.foundedYear) prompt += `Founded: ${data.foundedYear}\n`;
+      if (data.headquarters) prompt += `Headquarters: ${data.headquarters}\n`;
+      if (data.website) prompt += `Website: ${data.website}\n`;
+      if (data.industry) prompt += `Industry: ${data.industry}\n`;
+      if (data.employees) prompt += `Employees: ${data.employees}\n`;
+      if (data.funding) prompt += `Funding: ${data.funding}\n\n`;
 
-      setGeneratedKit(response.content);
-      toast.success('Press kit generated successfully');
+      if (data.executiveName) {
+        prompt += `\nExecutive Leadership:\n`;
+        prompt += `Name: ${data.executiveName}\n`;
+        if (data.executiveTitle) prompt += `Title: ${data.executiveTitle}\n`;
+        if (data.executiveBio) prompt += `Bio: ${data.executiveBio}\n\n`;
+      }
+
+      if (data.keyProducts) prompt += `Key Products/Services:\n${data.keyProducts}\n\n`;
+      if (data.achievements) prompt += `Key Achievements:\n${data.achievements}\n\n`;
+
+      if (data.mediaContact) {
+        prompt += `\nMedia Contact:\n`;
+        prompt += `Name: ${data.mediaContact}\n`;
+        if (data.mediaEmail) prompt += `Email: ${data.mediaEmail}\n`;
+        if (data.mediaPhone) prompt += `Phone: ${data.mediaPhone}\n`;
+      }
+
+      prompt += `\nPlease generate a complete professional press kit including:\n`;
+      prompt += `1. Company overview and boilerplate\n`;
+      prompt += `2. Executive bios and leadership information\n`;
+      prompt += `3. Product/service descriptions\n`;
+      prompt += `4. Recent achievements and milestones\n`;
+      prompt += `5. Media contact information\n`;
+      prompt += `6. Key facts and figures\n`;
+      prompt += `7. Suggested press release templates\n\n`;
+      prompt += `Format the output professionally and ready for distribution to media.`;
+
+      setLoadingStatus('Creating session...');
+      const session = await AIApiClient.createSession(prompt);
+
+      setLoadingStatus('Generating press kit...');
+
+      await AIApiClient.startChat(
+        { prompt, sessionId: session.sessionid },
+        (event: SSEEvent) => {
+          if (event.type === 'loadingStatus') {
+            setLoadingStatus(event.status || '');
+          } else if (event.type === 'finalResponse') {
+            if (event.content) {
+              outputRef.current += event.content;
+              setGeneratedKit(outputRef.current);
+            }
+          }
+        },
+        () => {
+          setIsGenerating(false);
+          setLoadingStatus('');
+          toast.success('Press kit generated successfully');
+        },
+        (error) => {
+          setIsGenerating(false);
+          setLoadingStatus('');
+          toast.error('Failed to generate press kit');
+          console.error('Error generating press kit:', error);
+        }
+      );
     } catch (error) {
       console.error('Error generating press kit:', error);
       toast.error('Failed to generate press kit');
-    } finally {
       setIsGenerating(false);
+      setLoadingStatus('');
     }
   };
 
@@ -370,6 +448,28 @@ const PressKitBuilder = () => {
               </div>
             </TabsContent>
           </Tabs>
+
+          {/* Loading Status */}
+          {isGenerating && (
+            <div className="space-y-3 mt-6">
+              {loadingStatus && (
+                <div className="p-3 rounded-lg border border-border bg-muted/30">
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                    <span className="text-sm font-medium">{loadingStatus}</span>
+                  </div>
+                </div>
+              )}
+              <div className="p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                  <Clock className="w-4 h-4" />
+                  <span className="text-xs font-medium">
+                    Processing time: 10-15 minutes for comprehensive press kit
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="flex gap-3 mt-6">
             <Button

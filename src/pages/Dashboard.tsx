@@ -48,6 +48,7 @@ import ScrollToTop from '@/components/ScrollToTop';
 import { useAuth } from '@/hooks/useAuth';
 import type { PRService } from '@/data/prServices';
 import logo from '@/assets/logo.png';
+import AIApiClient from '@/lib/aiApiClient';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -64,6 +65,21 @@ const Dashboard = () => {
       navigate('/auth');
     }
   }, [user, loading, navigate]);
+
+  // Initialize AI API client when dashboard loads
+  useEffect(() => {
+    if (user && !loading) {
+      const initAI = async () => {
+        try {
+          await AIApiClient.initialize();
+          console.log('AI API client initialized successfully');
+        } catch (error) {
+          console.error('Failed to initialize AI API client:', error);
+        }
+      };
+      initAI();
+    }
+  }, [user, loading]);
 
   const filteredServices = PR_SERVICES.filter(service => {
     const matchesSearch = service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -109,7 +125,7 @@ const Dashboard = () => {
             <img
               src={logo}
               alt="Relaya Logo"
-              className="h-32 md:h-36 w-auto object-contain"
+              className="h-16 md:h-16 w-auto object-contain"
             />
           </Link>
 

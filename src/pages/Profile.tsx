@@ -72,7 +72,7 @@ const Profile = () => {
             <img
               src={logo}
               alt="Relaya Logo"
-              className="h-32 md:h-36 w-auto object-contain"
+              className="h-16 md:h-16 w-auto object-contain"
             />
           </Link>
           <Link 

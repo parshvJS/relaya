@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Sparkles, Upload, CheckCircle, Loader2, Copy, RefreshCw } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Sparkles, Upload, CheckCircle, Loader2, Copy, RefreshCw, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import AIApiClient, { SSEEvent } from '@/lib/aiApiClient';
 
 interface BrandVoiceProfile {
   tone: string;
@@ -25,6 +25,20 @@ const BrandVoiceTrainer = () => {
   const [testInput, setTestInput] = useState('');
   const [generatedContent, setGeneratedContent] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState<string>('');
+  const outputRef = useRef<string>('');
+
+  // Initialize AI client
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await AIApiClient.initialize();
+      } catch (error) {
+        console.error('Failed to initialize AI client:', error);
+      }
+    };
+    init();
+  }, []);
 
   const analyzeVoice = async () => {
     if (!sampleContent.trim() || sampleContent.length < 200) {
@@ -33,20 +47,68 @@ const BrandVoiceTrainer = () => {
     }
 
     setIsAnalyzing(true);
+    outputRef.current = '';
     try {
-      const { data, error } = await supabase.functions.invoke('analyze-brand-voice', {
-        body: { sampleContent }
-      });
+      const prompt = `Analyze the following brand voice sample and create a comprehensive voice profile:\n\n${sampleContent}\n\nPlease provide:\n1. Tone analysis (professional, casual, technical, friendly, etc.)\n2. Common vocabulary patterns and frequently used words\n3. Sentence structure patterns\n4. Key phrases that define the voice\n5. Phrases to avoid\n6. Overall writing style\n7. Formality level\n8. Recommendations for maintaining consistency\n\nFormat the output as a structured JSON profile with these fields: tone, vocabulary, sentenceStructure, keyPhrases, avoidPhrases, writingStyle, formalityLevel, recommendations.`;
 
-      if (error) throw error;
+      setLoadingStatus('Creating analysis session...');
+      const session = await AIApiClient.createSession(prompt);
 
-      setVoiceProfile(data.profile);
-      toast.success('Brand voice profile created successfully');
+      setLoadingStatus('Analyzing brand voice...');
+
+      await AIApiClient.startChat(
+        { prompt, sessionId: session.sessionid },
+        (event: SSEEvent) => {
+          if (event.type === 'loadingStatus') {
+            setLoadingStatus(event.status || '');
+          } else if (event.type === 'finalResponse') {
+            if (event.content) {
+              outputRef.current += event.content;
+            }
+          }
+        },
+        () => {
+          setIsAnalyzing(false);
+          setLoadingStatus('');
+
+          // Parse the AI response to extract profile
+          try {
+            const jsonMatch = outputRef.current.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+              const profile = JSON.parse(jsonMatch[0]);
+              setVoiceProfile(profile);
+              toast.success('Brand voice profile created successfully');
+            } else {
+              // Fallback: create a basic profile from the text response
+              setVoiceProfile({
+                tone: 'Analyzed from sample',
+                vocabulary: [],
+                sentenceStructure: 'Analyzed from sample',
+                keyPhrases: [],
+                avoidPhrases: [],
+                writingStyle: outputRef.current.substring(0, 200),
+                formalityLevel: 'Medium',
+                recommendations: [outputRef.current],
+              });
+              toast.success('Brand voice profile created successfully');
+            }
+          } catch (error) {
+            console.error('Error parsing voice profile:', error);
+            toast.error('Failed to parse voice profile');
+          }
+        },
+        (error) => {
+          setIsAnalyzing(false);
+          setLoadingStatus('');
+          toast.error('Failed to analyze brand voice');
+          console.error('Error analyzing brand voice:', error);
+        }
+      );
     } catch (error) {
       console.error('Error analyzing brand voice:', error);
       toast.error('Failed to analyze brand voice');
-    } finally {
       setIsAnalyzing(false);
+      setLoadingStatus('');
     }
   };
 
@@ -57,23 +119,46 @@ const BrandVoiceTrainer = () => {
     }
 
     setIsGenerating(true);
+    setGeneratedContent('');
+    outputRef.current = '';
+
     try {
-      const { data, error } = await supabase.functions.invoke('generate-with-voice', {
-        body: { 
-          prompt: testInput,
-          voiceProfile
+      const prompt = `Generate content based on the following instructions while maintaining this brand voice profile:\n\nBrand Voice:\n- Tone: ${voiceProfile.tone}\n- Writing Style: ${voiceProfile.writingStyle}\n- Formality: ${voiceProfile.formalityLevel}\n- Sentence Structure: ${voiceProfile.sentenceStructure}\n${voiceProfile.keyPhrases.length > 0 ? `- Key Phrases: ${voiceProfile.keyPhrases.join(', ')}` : ''}\n${voiceProfile.avoidPhrases.length > 0 ? `- Avoid: ${voiceProfile.avoidPhrases.join(', ')}` : ''}\n\nUser Instructions:\n${testInput}\n\nPlease generate content that strictly follows the brand voice characteristics above.`;
+
+      setLoadingStatus('Creating session...');
+      const session = await AIApiClient.createSession(prompt);
+
+      setLoadingStatus('Generating content...');
+
+      await AIApiClient.startChat(
+        { prompt, sessionId: session.sessionid },
+        (event: SSEEvent) => {
+          if (event.type === 'loadingStatus') {
+            setLoadingStatus(event.status || '');
+          } else if (event.type === 'finalResponse') {
+            if (event.content) {
+              outputRef.current += event.content;
+              setGeneratedContent(outputRef.current);
+            }
+          }
+        },
+        () => {
+          setIsGenerating(false);
+          setLoadingStatus('');
+          toast.success('Content generated with your brand voice');
+        },
+        (error) => {
+          setIsGenerating(false);
+          setLoadingStatus('');
+          toast.error('Failed to generate content');
+          console.error('Error generating content:', error);
         }
-      });
-
-      if (error) throw error;
-
-      setGeneratedContent(data.content);
-      toast.success('Content generated with your brand voice');
+      );
     } catch (error) {
       console.error('Error generating content:', error);
       toast.error('Failed to generate content');
-    } finally {
       setIsGenerating(false);
+      setLoadingStatus('');
     }
   };
 
@@ -108,6 +193,28 @@ const BrandVoiceTrainer = () => {
               {sampleContent.length} characters | For optimal results, provide 500+ characters from multiple content pieces
             </p>
           </div>
+
+          {/* Loading Status for Analysis */}
+          {isAnalyzing && (
+            <div className="space-y-3">
+              {loadingStatus && (
+                <div className="p-3 rounded-lg border border-border bg-muted/30">
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                    <span className="text-sm font-medium">{loadingStatus}</span>
+                  </div>
+                </div>
+              )}
+              <div className="p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                  <Clock className="w-4 h-4" />
+                  <span className="text-xs font-medium">
+                    Analysis typically takes 10-15 minutes
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
 
           <Button
             onClick={analyzeVoice}
@@ -224,6 +331,29 @@ const BrandVoiceTrainer = () => {
                   className="input-modern min-h-[80px]"
                 />
               </div>
+
+              {/* Loading Status for Generation */}
+              {isGenerating && (
+                <div className="space-y-3">
+                  {loadingStatus && (
+                    <div className="p-3 rounded-lg border border-border bg-muted/30">
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                        <span className="text-sm font-medium">{loadingStatus}</span>
+                      </div>
+                    </div>
+                  )}
+                  <div className="p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                    <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                      <Clock className="w-4 h-4" />
+                      <span className="text-xs font-medium">
+                        Generation typically takes 10-15 minutes
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <Button
                 onClick={generateWithVoice}
                 disabled={isGenerating || !testInput.trim()}

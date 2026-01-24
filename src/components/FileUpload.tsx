@@ -6,6 +6,7 @@ interface UploadedFile {
   type: string;
   size: number;
   content: string;
+  file?: File; // Store original File object for API uploads
 }
 
 interface FileUploadProps {
@@ -90,7 +91,8 @@ const FileUpload = ({
           name: file.name,
           type: file.type,
           size: file.size,
-          content: content
+          content: content,
+          file: file // Store original File object
         });
       } catch (err) {
         setError(`Failed to read "${file.name}"`);
