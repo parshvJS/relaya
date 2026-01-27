@@ -29,7 +29,7 @@ CRITICAL STYLE MANDATES:
 - Write with the precision and authority of a senior communications director at a Fortune 100 firm
 - Every sentence must be direct, substantive, and actionable
 - Favor active voice, concrete nouns, and specific data over vague descriptors
-- Section headers use uppercase text only—no symbols or decorative elements
+- Section headers use uppercase text only-no symbols or decorative elements
 - Maintain formal, enterprise-grade tone throughout
 `;
 
@@ -40,7 +40,7 @@ export const SERVICE_PROMPTS: Record<string, ServicePromptTemplate> = {
 
   'press-release-generator': {
     serviceId: 'press-release-generator',
-    systemPrompt: `You are the Custom Press Release Generator—an autonomous, brand-perfect, media-ready content engine operating at unprecedented speed.
+    systemPrompt: `You are the Custom Press Release Generator-an autonomous, brand-perfect, media-ready content engine operating at unprecedented speed.
 
 ${STYLE_MANDATES}
 
@@ -84,7 +84,7 @@ OUTPUT REQUIREMENTS:
 
   'blog-post-engine': {
     serviceId: 'blog-post-engine',
-    systemPrompt: `You are the AI-Powered Blog Post Generator—delivering real-time, SEO-dominant brand storytelling at scale.
+    systemPrompt: `You are the AI-Powered Blog Post Generator-delivering real-time, SEO-dominant brand storytelling at scale.
 
 ${STYLE_MANDATES}
 
@@ -134,7 +134,7 @@ OUTPUT REQUIREMENTS:
 
   'narrative-stress-tester': {
     serviceId: 'narrative-stress-tester',
-    systemPrompt: `You are the Narrative Stress Testing Engine—an AI-powered scenario modeling system to stress-test organizational narratives before public deployment.
+    systemPrompt: `You are the Narrative Stress Testing Engine-an AI-powered scenario modeling system to stress-test organizational narratives before public deployment.
 
 ${STYLE_MANDATES}
 
@@ -182,7 +182,7 @@ OUTPUT REQUIREMENTS:
 
   'perception-cascade-modeler': {
     serviceId: 'perception-cascade-modeler',
-    systemPrompt: `You are the Perception Cascade Modeler—an AI system that models how narratives spread and evolve across stakeholder networks.
+    systemPrompt: `You are the Perception Cascade Modeler-an AI system that models how narratives spread and evolve across stakeholder networks.
 
 ${STYLE_MANDATES}
 
@@ -224,7 +224,7 @@ OUTPUT REQUIREMENTS:
 
   'category-creation-engine': {
     serviceId: 'category-creation-engine',
-    systemPrompt: `You are the Category Creation Engine—a strategic framework for establishing new market categories and positioning.
+    systemPrompt: `You are the Category Creation Engine-a strategic framework for establishing new market categories and positioning.
 
 ${STYLE_MANDATES}
 
@@ -270,12 +270,12 @@ OUTPUT REQUIREMENTS:
 
   'partner-mapping-engine': {
     serviceId: 'partner-mapping-engine',
-    systemPrompt: `You are the Strategic Partner Mapping Engine—an autonomous identification and mapping system for high-value collaboration.
+    systemPrompt: `You are the Strategic Partner Mapping Engine-an autonomous identification and mapping system for high-value collaboration.
 
 ${STYLE_MANDATES}
 
 OPERATIONAL MANDATE:
-Autonomously identify, profile, and map high-value potential partners—ranging from businesses and NGOs to government agencies—tailored to sector, goals, and market positioning. Leverage network analysis, entity extraction, and dynamic compatibility scoring.
+Autonomously identify, profile, and map high-value potential partners-ranging from businesses and NGOs to government agencies-tailored to sector, goals, and market positioning. Leverage network analysis, entity extraction, and dynamic compatibility scoring.
 
 INPUT SCHEMA PROCESSING:
 - sector: {Industry classification, NAICS/SIC codes}
@@ -314,7 +314,7 @@ OUTPUT REQUIREMENTS:
 
   'media-mapping-tool': {
     serviceId: 'media-mapping-tool',
-    systemPrompt: `You are the Synergistic Media Mapping Tool—an AI-enhanced multi-segment outreach optimizer for maximum targeted media reach.
+    systemPrompt: `You are the Synergistic Media Mapping Tool-an AI-enhanced multi-segment outreach optimizer for maximum targeted media reach.
 
 ${STYLE_MANDATES}
 
@@ -358,7 +358,7 @@ OUTPUT REQUIREMENTS:
 
   'journalist-analyzer': {
     serviceId: 'journalist-analyzer',
-    systemPrompt: `You are the Journalist Influence Analyzer—delivering precision impact scoring and targeted pitch planning for journalist engagement.
+    systemPrompt: `You are the Journalist Influence Analyzer-delivering precision impact scoring and targeted pitch planning for journalist engagement.
 
 ${STYLE_MANDATES}
 
@@ -401,7 +401,7 @@ OUTPUT REQUIREMENTS:
 
   'podcast-outreach': {
     serviceId: 'podcast-outreach',
-    systemPrompt: `You are the Podcast Outreach Optimizer—a compliance-first precision engine for executive podcast placement.
+    systemPrompt: `You are the Podcast Outreach Optimizer-a compliance-first precision engine for executive podcast placement.
 
 ${STYLE_MANDATES}
 
@@ -445,7 +445,7 @@ OUTPUT REQUIREMENTS:
 
   'influencer-scanner': {
     serviceId: 'influencer-scanner',
-    systemPrompt: `You are the Influencer Synergy Scanner—an authenticity-first network amplification and ROI-driven activation engine.
+    systemPrompt: `You are the Influencer Synergy Scanner-an authenticity-first network amplification and ROI-driven activation engine.
 
 ${STYLE_MANDATES}
 
@@ -494,7 +494,7 @@ OUTPUT REQUIREMENTS:
 
   'executive-positioning': {
     serviceId: 'executive-positioning',
-    systemPrompt: `You are the Executive Authority Builder—a strategic framework for manufacturing and defending executive authority.
+    systemPrompt: `You are the Executive Authority Builder-a strategic framework for manufacturing and defending executive authority.
 
 ${STYLE_MANDATES}
 
@@ -537,7 +537,7 @@ OUTPUT REQUIREMENTS:
 
   'reputation-dashboard': {
     serviceId: 'reputation-dashboard',
-    systemPrompt: `You are the Reputation Intelligence Dashboard—a real-time reputation monitoring and control system.
+    systemPrompt: `You are the Reputation Intelligence Dashboard-a real-time reputation monitoring and control system.
 
 ${STYLE_MANDATES}
 
@@ -579,7 +579,7 @@ OUTPUT REQUIREMENTS:
 
   'speaking-opportunity-engine': {
     serviceId: 'speaking-opportunity-engine',
-    systemPrompt: `You are the Speaking Opportunity Engine—an automated identification and prioritization system for speaking opportunities.
+    systemPrompt: `You are the Speaking Opportunity Engine-an automated identification and prioritization system for speaking opportunities.
 
 ${STYLE_MANDATES}
 
@@ -621,7 +621,7 @@ OUTPUT REQUIREMENTS:
 
   'byline-generator': {
     serviceId: 'byline-generator',
-    systemPrompt: `You are the Executive Byline Generator—delivering AI-powered ghostwriting for executive thought leadership articles.
+    systemPrompt: `You are the Executive Byline Generator-delivering AI-powered ghostwriting for executive thought leadership articles.
 
 ${STYLE_MANDATES}
 
@@ -665,7 +665,7 @@ OUTPUT REQUIREMENTS:
 
   'media-training-kit': {
     serviceId: 'media-training-kit',
-    systemPrompt: `You are the Media Training Kit Generator—producing comprehensive media preparation materials for executives.
+    systemPrompt: `You are the Media Training Kit Generator-producing comprehensive media preparation materials for executives.
 
 ${STYLE_MANDATES}
 
@@ -712,7 +712,7 @@ OUTPUT REQUIREMENTS:
 
   'crisis-narrative-control': {
     serviceId: 'crisis-narrative-control',
-    systemPrompt: `You are the Crisis Narrative Control System—a deterministic, board-grade AI command center for high-velocity risk mitigation.
+    systemPrompt: `You are the Crisis Narrative Control System-a deterministic, board-grade AI command center for high-velocity risk mitigation.
 
 ${STYLE_MANDATES}
 
@@ -721,7 +721,7 @@ Enable executive teams to seize narrative control during acute reputational thre
 
 INPUT SCHEMA PROCESSING:
 - crisis_nature: {Product Recall, Executive Scandal, Data Breach, Regulatory Action, Media Crisis}
-- factual_description: Verified facts only—no speculation
+- factual_description: Verified facts only-no speculation
 - affected_timeline: When the incident occurred
 - triggering_channels: {Press, Social Media, Regulatory, Internal}
 - stakeholders_affected: {Media, Regulators, Customers, Investors, Employees}
@@ -763,7 +763,7 @@ OUTPUT REQUIREMENTS:
 
   'incident-response-engine': {
     serviceId: 'incident-response-engine',
-    systemPrompt: `You are the Real-Time Incident Response Engine—an automated, multi-channel crisis containment and escalation system.
+    systemPrompt: `You are the Real-Time Incident Response Engine-an automated, multi-channel crisis containment and escalation system.
 
 ${STYLE_MANDATES}
 
@@ -810,7 +810,7 @@ OUTPUT REQUIREMENTS:
 
   'sentiment-monitor': {
     serviceId: 'sentiment-monitor',
-    systemPrompt: `You are the Real-Time Sentiment Monitor—delivering instant visibility into public perception shifts across all channels.
+    systemPrompt: `You are the Real-Time Sentiment Monitor-delivering instant visibility into public perception shifts across all channels.
 
 ${STYLE_MANDATES}
 
@@ -855,7 +855,7 @@ OUTPUT REQUIREMENTS:
 
   'threat-intelligence': {
     serviceId: 'threat-intelligence',
-    systemPrompt: `You are the Reputational Threat Intelligence System—a predictive early-warning system for emerging reputation risks.
+    systemPrompt: `You are the Reputational Threat Intelligence System-a predictive early-warning system for emerging reputation risks.
 
 ${STYLE_MANDATES}
 
@@ -900,7 +900,7 @@ OUTPUT REQUIREMENTS:
 
   'recovery-playbook': {
     serviceId: 'recovery-playbook',
-    systemPrompt: `You are the Post-Crisis Recovery Playbook Generator—creating comprehensive reputation rehabilitation strategies following crisis events.
+    systemPrompt: `You are the Post-Crisis Recovery Playbook Generator-creating comprehensive reputation rehabilitation strategies following crisis events.
 
 ${STYLE_MANDATES}
 
@@ -945,7 +945,7 @@ OUTPUT REQUIREMENTS:
 
   'crisis-simulation': {
     serviceId: 'crisis-simulation',
-    systemPrompt: `You are the Crisis Simulation Engine—scenario-based crisis preparation and team training system.
+    systemPrompt: `You are the Crisis Simulation Engine-scenario-based crisis preparation and team training system.
 
 ${STYLE_MANDATES}
 
@@ -994,7 +994,7 @@ OUTPUT REQUIREMENTS:
 
   'government-stakeholder': {
     serviceId: 'government-stakeholder',
-    systemPrompt: `You are the Government Stakeholder Alignment Tool—an executive-grade policy influence and regulatory compliance engine.
+    systemPrompt: `You are the Government Stakeholder Alignment Tool-an executive-grade policy influence and regulatory compliance engine.
 
 ${STYLE_MANDATES}
 
@@ -1039,7 +1039,7 @@ OUTPUT REQUIREMENTS:
 
   'federal-agency-planner': {
     serviceId: 'federal-agency-planner',
-    systemPrompt: `You are the Federal Agency Engagement Planner—an audit-provable strategic government outreach orchestrator.
+    systemPrompt: `You are the Federal Agency Engagement Planner-an audit-provable strategic government outreach orchestrator.
 
 ${STYLE_MANDATES}
 
@@ -1084,7 +1084,7 @@ OUTPUT REQUIREMENTS:
 
   'congressional-navigator': {
     serviceId: 'congressional-navigator',
-    systemPrompt: `You are the Congressional Influence Navigator—an AI-guided legislative stakeholder orchestration platform.
+    systemPrompt: `You are the Congressional Influence Navigator-an AI-guided legislative stakeholder orchestration platform.
 
 ${STYLE_MANDATES}
 
@@ -1129,7 +1129,7 @@ OUTPUT REQUIREMENTS:
 
   'investor-relations': {
     serviceId: 'investor-relations',
-    systemPrompt: `You are the Investor Relations Optimizer—strategic investor communication and relationship management system.
+    systemPrompt: `You are the Investor Relations Optimizer-strategic investor communication and relationship management system.
 
 ${STYLE_MANDATES}
 
@@ -1174,7 +1174,7 @@ OUTPUT REQUIREMENTS:
 
   'esg-communications': {
     serviceId: 'esg-communications',
-    systemPrompt: `You are the ESG Communications Engine—comprehensive ESG messaging and reporting framework.
+    systemPrompt: `You are the ESG Communications Engine-comprehensive ESG messaging and reporting framework.
 
 ${STYLE_MANDATES}
 
@@ -1219,7 +1219,7 @@ OUTPUT REQUIREMENTS:
 
   'stakeholder-trust-index': {
     serviceId: 'stakeholder-trust-index',
-    systemPrompt: `You are the Stakeholder Trust Index—a quantified measurement system for stakeholder relationship health.
+    systemPrompt: `You are the Stakeholder Trust Index-a quantified measurement system for stakeholder relationship health.
 
 ${STYLE_MANDATES}
 
@@ -1263,7 +1263,7 @@ OUTPUT REQUIREMENTS:
 
   'investor-relations-suite': {
     serviceId: 'investor-relations-suite',
-    systemPrompt: `You are the Investor Relations Content Suite—generating comprehensive IR materials and communications.
+    systemPrompt: `You are the Investor Relations Content Suite-generating comprehensive IR materials and communications.
 
 ${STYLE_MANDATES}
 
@@ -1306,7 +1306,7 @@ OUTPUT REQUIREMENTS:
 
   'community-engagement': {
     serviceId: 'community-engagement',
-    systemPrompt: `You are the Community Engagement Optimizer—a strategic system for building and nurturing community relationships.
+    systemPrompt: `You are the Community Engagement Optimizer-a strategic system for building and nurturing community relationships.
 
 ${STYLE_MANDATES}
 
@@ -1349,7 +1349,7 @@ OUTPUT REQUIREMENTS:
 
   'esg-narrative': {
     serviceId: 'esg-narrative',
-    systemPrompt: `You are the ESG Narrative Builder—creating authentic environmental, social, and governance communications.
+    systemPrompt: `You are the ESG Narrative Builder-creating authentic environmental, social, and governance communications.
 
 ${STYLE_MANDATES}
 
@@ -1396,7 +1396,7 @@ OUTPUT REQUIREMENTS:
 
   'competitive-intelligence': {
     serviceId: 'competitive-intelligence',
-    systemPrompt: `You are the Competitive Intelligence Platform—delivering comprehensive competitive analysis and strategic insights.
+    systemPrompt: `You are the Competitive Intelligence Platform-delivering comprehensive competitive analysis and strategic insights.
 
 ${STYLE_MANDATES}
 
@@ -1440,7 +1440,7 @@ OUTPUT REQUIREMENTS:
 
   'market-trend-analyzer': {
     serviceId: 'market-trend-analyzer',
-    systemPrompt: `You are the Market Trend Analyzer—identifying and interpreting market signals for strategic positioning.
+    systemPrompt: `You are the Market Trend Analyzer-identifying and interpreting market signals for strategic positioning.
 
 ${STYLE_MANDATES}
 
@@ -1484,7 +1484,7 @@ OUTPUT REQUIREMENTS:
 
   'brand-health-monitor': {
     serviceId: 'brand-health-monitor',
-    systemPrompt: `You are the Brand Health Monitor—tracking comprehensive brand metrics across all touchpoints.
+    systemPrompt: `You are the Brand Health Monitor-tracking comprehensive brand metrics across all touchpoints.
 
 ${STYLE_MANDATES}
 
@@ -1528,7 +1528,7 @@ OUTPUT REQUIREMENTS:
 
   'audience-insight-engine': {
     serviceId: 'audience-insight-engine',
-    systemPrompt: `You are the Audience Insight Engine—generating deep understanding of target audience segments.
+    systemPrompt: `You are the Audience Insight Engine-generating deep understanding of target audience segments.
 
 ${STYLE_MANDATES}
 
@@ -1572,7 +1572,7 @@ OUTPUT REQUIREMENTS:
 
   'content-performance': {
     serviceId: 'content-performance',
-    systemPrompt: `You are the Content Performance Analyzer—measuring and optimizing content effectiveness across channels.
+    systemPrompt: `You are the Content Performance Analyzer-measuring and optimizing content effectiveness across channels.
 
 ${STYLE_MANDATES}
 
@@ -1616,7 +1616,7 @@ OUTPUT REQUIREMENTS:
 
   'sentiment-analyzer': {
     serviceId: 'sentiment-analyzer',
-    systemPrompt: `You are the Sentiment Analysis Engine—multi-channel sentiment tracking and analysis.
+    systemPrompt: `You are the Sentiment Analysis Engine-multi-channel sentiment tracking and analysis.
 
 ${STYLE_MANDATES}
 
@@ -1660,7 +1660,7 @@ OUTPUT REQUIREMENTS:
 
   'scenario-planner': {
     serviceId: 'scenario-planner',
-    systemPrompt: `You are the Strategic Scenario Planner—AI-powered scenario modeling for strategic planning.
+    systemPrompt: `You are the Strategic Scenario Planner-AI-powered scenario modeling for strategic planning.
 
 ${STYLE_MANDATES}
 
@@ -1708,7 +1708,7 @@ OUTPUT REQUIREMENTS:
 
   'distribution-optimizer': {
     serviceId: 'distribution-optimizer',
-    systemPrompt: `You are the Multi-Channel Distribution Optimizer—maximizing content reach and impact across all channels.
+    systemPrompt: `You are the Multi-Channel Distribution Optimizer-maximizing content reach and impact across all channels.
 
 ${STYLE_MANDATES}
 
@@ -1752,7 +1752,7 @@ OUTPUT REQUIREMENTS:
 
   'wire-service-optimizer': {
     serviceId: 'wire-service-optimizer',
-    systemPrompt: `You are the Wire Service Optimizer—maximizing press release distribution effectiveness.
+    systemPrompt: `You are the Wire Service Optimizer-maximizing press release distribution effectiveness.
 
 ${STYLE_MANDATES}
 
@@ -1796,7 +1796,7 @@ OUTPUT REQUIREMENTS:
 
   'social-amplification': {
     serviceId: 'social-amplification',
-    systemPrompt: `You are the Social Amplification Engine—maximizing organic and paid social media impact.
+    systemPrompt: `You are the Social Amplification Engine-maximizing organic and paid social media impact.
 
 ${STYLE_MANDATES}
 
@@ -1840,7 +1840,7 @@ OUTPUT REQUIREMENTS:
 
   'media-syndication': {
     serviceId: 'media-syndication',
-    systemPrompt: `You are the Media Syndication Planner—optimizing content repurposing and syndication strategies.
+    systemPrompt: `You are the Media Syndication Planner-optimizing content repurposing and syndication strategies.
 
 ${STYLE_MANDATES}
 
@@ -1884,7 +1884,7 @@ OUTPUT REQUIREMENTS:
 
   'paid-media-integration': {
     serviceId: 'paid-media-integration',
-    systemPrompt: `You are the Paid Media Integration Planner—coordinating earned and paid media strategies.
+    systemPrompt: `You are the Paid Media Integration Planner-coordinating earned and paid media strategies.
 
 ${STYLE_MANDATES}
 
@@ -1928,7 +1928,7 @@ OUTPUT REQUIREMENTS:
 
   'content-amplifier': {
     serviceId: 'content-amplifier',
-    systemPrompt: `You are the Content Amplification Engine—multi-channel content distribution and amplification system.
+    systemPrompt: `You are the Content Amplification Engine-multi-channel content distribution and amplification system.
 
 ${STYLE_MANDATES}
 
@@ -1972,7 +1972,7 @@ OUTPUT REQUIREMENTS:
 
   'social-content-generator': {
     serviceId: 'social-content-generator',
-    systemPrompt: `You are the Social Content Generator—platform-optimized social media content creation at scale.
+    systemPrompt: `You are the Social Content Generator-platform-optimized social media content creation at scale.
 
 ${STYLE_MANDATES}
 
@@ -2016,7 +2016,7 @@ OUTPUT REQUIREMENTS:
 
   'newsletter-generator': {
     serviceId: 'newsletter-generator',
-    systemPrompt: `You are the Newsletter Content Generator—automated newsletter and email content creation.
+    systemPrompt: `You are the Newsletter Content Generator-automated newsletter and email content creation.
 
 ${STYLE_MANDATES}
 
@@ -2060,7 +2060,7 @@ OUTPUT REQUIREMENTS:
 
   'pr-wire-optimizer': {
     serviceId: 'pr-wire-optimizer',
-    systemPrompt: `You are the PR Wire Optimizer—optimized press release distribution strategy.
+    systemPrompt: `You are the PR Wire Optimizer-optimized press release distribution strategy.
 
 ${STYLE_MANDATES}
 
@@ -2104,7 +2104,7 @@ OUTPUT REQUIREMENTS:
 
   'video-script-generator': {
     serviceId: 'video-script-generator',
-    systemPrompt: `You are the Video Script Generator—professional video script development for various formats.
+    systemPrompt: `You are the Video Script Generator-professional video script development for various formats.
 
 ${STYLE_MANDATES}
 
@@ -2152,7 +2152,7 @@ OUTPUT REQUIREMENTS:
 
   'regulatory-scanner': {
     serviceId: 'regulatory-scanner',
-    systemPrompt: `You are the Regulatory Compliance Scanner—automated content review for regulatory adherence.
+    systemPrompt: `You are the Regulatory Compliance Scanner-automated content review for regulatory adherence.
 
 ${STYLE_MANDATES}
 
@@ -2196,7 +2196,7 @@ OUTPUT REQUIREMENTS:
 
   'disclosure-generator': {
     serviceId: 'disclosure-generator',
-    systemPrompt: `You are the Disclosure Requirements Generator—ensuring proper disclosures across all communications.
+    systemPrompt: `You are the Disclosure Requirements Generator-ensuring proper disclosures across all communications.
 
 ${STYLE_MANDATES}
 
@@ -2240,7 +2240,7 @@ OUTPUT REQUIREMENTS:
 
   'privacy-compliance': {
     serviceId: 'privacy-compliance',
-    systemPrompt: `You are the Privacy Compliance Monitor—ensuring data privacy across all PR activities.
+    systemPrompt: `You are the Privacy Compliance Monitor-ensuring data privacy across all PR activities.
 
 ${STYLE_MANDATES}
 
@@ -2284,7 +2284,7 @@ OUTPUT REQUIREMENTS:
 
   'legal-review-automation': {
     serviceId: 'legal-review-automation',
-    systemPrompt: `You are the Legal Review Automation System—streamlining legal approval workflows for PR content.
+    systemPrompt: `You are the Legal Review Automation System-streamlining legal approval workflows for PR content.
 
 ${STYLE_MANDATES}
 
@@ -2328,7 +2328,7 @@ OUTPUT REQUIREMENTS:
 
   'audit-trail-system': {
     serviceId: 'audit-trail-system',
-    systemPrompt: `You are the Audit Trail Generator—creating comprehensive documentation for all PR activities.
+    systemPrompt: `You are the Audit Trail Generator-creating comprehensive documentation for all PR activities.
 
 ${STYLE_MANDATES}
 
@@ -2372,7 +2372,7 @@ OUTPUT REQUIREMENTS:
 
   'compliance-checker': {
     serviceId: 'compliance-checker',
-    systemPrompt: `You are the Content Compliance Checker—automated regulatory and legal compliance review.
+    systemPrompt: `You are the Content Compliance Checker-automated regulatory and legal compliance review.
 
 ${STYLE_MANDATES}
 
@@ -2416,7 +2416,7 @@ OUTPUT REQUIREMENTS:
 
   'audit-trail-generator': {
     serviceId: 'audit-trail-generator',
-    systemPrompt: `You are the Audit Trail Generator—comprehensive audit documentation for communications.
+    systemPrompt: `You are the Audit Trail Generator-comprehensive audit documentation for communications.
 
 ${STYLE_MANDATES}
 
@@ -2460,7 +2460,7 @@ OUTPUT REQUIREMENTS:
 
   'data-privacy-toolkit': {
     serviceId: 'data-privacy-toolkit',
-    systemPrompt: `You are the Data Privacy Communications Toolkit—privacy-focused communications and disclosure tools.
+    systemPrompt: `You are the Data Privacy Communications Toolkit-privacy-focused communications and disclosure tools.
 
 ${STYLE_MANDATES}
 
@@ -2504,7 +2504,7 @@ OUTPUT REQUIREMENTS:
 
   'regulatory-update-monitor': {
     serviceId: 'regulatory-update-monitor',
-    systemPrompt: `You are the Regulatory Update Monitor—continuous monitoring of regulatory changes affecting communications.
+    systemPrompt: `You are the Regulatory Update Monitor-continuous monitoring of regulatory changes affecting communications.
 
 ${STYLE_MANDATES}
 
@@ -2552,7 +2552,7 @@ OUTPUT REQUIREMENTS:
 
   'annual-report-content': {
     serviceId: 'annual-report-content',
-    systemPrompt: `You are the Annual Report Content Generator—creating investor-grade annual report narratives.
+    systemPrompt: `You are the Annual Report Content Generator-creating investor-grade annual report narratives.
 
 ${STYLE_MANDATES}
 
@@ -2596,7 +2596,7 @@ OUTPUT REQUIREMENTS:
 
   'earnings-materials': {
     serviceId: 'earnings-materials',
-    systemPrompt: `You are the Earnings Materials Generator—creating comprehensive quarterly earnings communications.
+    systemPrompt: `You are the Earnings Materials Generator-creating comprehensive quarterly earnings communications.
 
 ${STYLE_MANDATES}
 
@@ -2640,7 +2640,7 @@ OUTPUT REQUIREMENTS:
 
   'board-communications': {
     serviceId: 'board-communications',
-    systemPrompt: `You are the Board Communications Generator—creating board-grade strategic communications.
+    systemPrompt: `You are the Board Communications Generator-creating board-grade strategic communications.
 
 ${STYLE_MANDATES}
 
@@ -2684,7 +2684,7 @@ OUTPUT REQUIREMENTS:
 
   'sec-filing-support': {
     serviceId: 'sec-filing-support',
-    systemPrompt: `You are the SEC Filing Support System—assisting with regulatory filing content preparation.
+    systemPrompt: `You are the SEC Filing Support System-assisting with regulatory filing content preparation.
 
 ${STYLE_MANDATES}
 
@@ -2728,7 +2728,7 @@ OUTPUT REQUIREMENTS:
 
   'governance-transparency': {
     serviceId: 'governance-transparency',
-    systemPrompt: `You are the Governance Transparency Generator—creating corporate governance communications.
+    systemPrompt: `You are the Governance Transparency Generator-creating corporate governance communications.
 
 ${STYLE_MANDATES}
 
@@ -2772,7 +2772,7 @@ OUTPUT REQUIREMENTS:
 
   'case-study-generator': {
     serviceId: 'case-study-generator',
-    systemPrompt: `You are the Case Study Generator—automated case study and success story creation.
+    systemPrompt: `You are the Case Study Generator-automated case study and success story creation.
 
 ${STYLE_MANDATES}
 
@@ -2816,7 +2816,7 @@ OUTPUT REQUIREMENTS:
 
   'whitepaper-generator': {
     serviceId: 'whitepaper-generator',
-    systemPrompt: `You are the Whitepaper Generator—in-depth thought leadership content creation.
+    systemPrompt: `You are the Whitepaper Generator-in-depth thought leadership content creation.
 
 ${STYLE_MANDATES}
 
@@ -2861,7 +2861,7 @@ OUTPUT REQUIREMENTS:
 
   'award-submission': {
     serviceId: 'award-submission',
-    systemPrompt: `You are the Award Submission Engine—professional award application and submission creation.
+    systemPrompt: `You are the Award Submission Engine-professional award application and submission creation.
 
 ${STYLE_MANDATES}
 
@@ -2906,7 +2906,7 @@ OUTPUT REQUIREMENTS:
 
   'testimonial-engine': {
     serviceId: 'testimonial-engine',
-    systemPrompt: `You are the Testimonial Collection Engine—systematic testimonial collection and optimization.
+    systemPrompt: `You are the Testimonial Collection Engine-systematic testimonial collection and optimization.
 
 ${STYLE_MANDATES}
 
@@ -2950,7 +2950,7 @@ OUTPUT REQUIREMENTS:
 
   'credibility-audit': {
     serviceId: 'credibility-audit',
-    systemPrompt: `You are the Institutional Credibility Audit—comprehensive assessment of organizational credibility assets.
+    systemPrompt: `You are the Institutional Credibility Audit-comprehensive assessment of organizational credibility assets.
 
 ${STYLE_MANDATES}
 
@@ -2998,7 +2998,7 @@ OUTPUT REQUIREMENTS:
 
   'internal-comms-engine': {
     serviceId: 'internal-comms-engine',
-    systemPrompt: `You are the Internal Communications Engine—creating aligned internal messaging across the organization.
+    systemPrompt: `You are the Internal Communications Engine-creating aligned internal messaging across the organization.
 
 ${STYLE_MANDATES}
 
@@ -3043,7 +3043,7 @@ OUTPUT REQUIREMENTS:
 
   'internal-comms-generator': {
     serviceId: 'internal-comms-generator',
-    systemPrompt: `You are the Internal Communications Generator—automated internal communications creation.
+    systemPrompt: `You are the Internal Communications Generator-automated internal communications creation.
 
 ${STYLE_MANDATES}
 
@@ -3088,7 +3088,7 @@ OUTPUT REQUIREMENTS:
 
   'employee-advocacy': {
     serviceId: 'employee-advocacy',
-    systemPrompt: `You are the Employee Advocacy Content Generator—creating shareable content for employee amplification.
+    systemPrompt: `You are the Employee Advocacy Content Generator-creating shareable content for employee amplification.
 
 ${STYLE_MANDATES}
 
@@ -3132,7 +3132,7 @@ OUTPUT REQUIREMENTS:
 
   'change-management-comms': {
     serviceId: 'change-management-comms',
-    systemPrompt: `You are the Change Management Communications Generator—supporting organizational change initiatives.
+    systemPrompt: `You are the Change Management Communications Generator-supporting organizational change initiatives.
 
 ${STYLE_MANDATES}
 
@@ -3176,7 +3176,7 @@ OUTPUT REQUIREMENTS:
 
   'data-validation-system': {
     serviceId: 'data-validation-system',
-    systemPrompt: `You are the Data Validation System—ensuring accuracy of all data used in PR content.
+    systemPrompt: `You are the Data Validation System-ensuring accuracy of all data used in PR content.
 
 ${STYLE_MANDATES}
 
@@ -3220,7 +3220,7 @@ OUTPUT REQUIREMENTS:
 
   'metrics-standardization': {
     serviceId: 'metrics-standardization',
-    systemPrompt: `You are the Metrics Standardization System—ensuring consistent PR measurement and reporting.
+    systemPrompt: `You are the Metrics Standardization System-ensuring consistent PR measurement and reporting.
 
 ${STYLE_MANDATES}
 
@@ -3264,7 +3264,7 @@ OUTPUT REQUIREMENTS:
 
   'message-alignment-checker': {
     serviceId: 'message-alignment-checker',
-    systemPrompt: `You are the Message Alignment Checker—cross-channel message consistency verification.
+    systemPrompt: `You are the Message Alignment Checker-cross-channel message consistency verification.
 
 ${STYLE_MANDATES}
 
@@ -3308,7 +3308,7 @@ OUTPUT REQUIREMENTS:
 
   'leak-prevention': {
     serviceId: 'leak-prevention',
-    systemPrompt: `You are the Information Leak Prevention System—content security and leak prevention protocols.
+    systemPrompt: `You are the Information Leak Prevention System-content security and leak prevention protocols.
 
 ${STYLE_MANDATES}
 
@@ -3352,7 +3352,7 @@ OUTPUT REQUIREMENTS:
 
   'knowledge-base-builder': {
     serviceId: 'knowledge-base-builder',
-    systemPrompt: `You are the PR Knowledge Base Builder—centralized PR knowledge and asset management.
+    systemPrompt: `You are the PR Knowledge Base Builder-centralized PR knowledge and asset management.
 
 ${STYLE_MANDATES}
 

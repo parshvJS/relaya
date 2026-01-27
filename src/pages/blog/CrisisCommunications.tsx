@@ -99,7 +99,7 @@ const CrisisCommunications = () => {
 
               <h2>The Changing Nature of Corporate Crises</h2>
               <p>
-                Corporate crises have evolved dramatically. Traditional crises—product recalls, executive misconduct, financial irregularities—remain threats, but digital dynamics have introduced new categories of risk. Social media controversies can explode overnight. Data breaches expose customer information. Employee activism goes public. Algorithmic errors create unintended consequences. Supply chain disruptions cascade globally.
+                Corporate crises have evolved dramatically. Traditional crises-product recalls, executive misconduct, financial irregularities-remain threats, but digital dynamics have introduced new categories of risk. Social media controversies can explode overnight. Data breaches expose customer information. Employee activism goes public. Algorithmic errors create unintended consequences. Supply chain disruptions cascade globally.
               </p>
               <p>
                 What distinguishes modern crises is velocity and transparency. Information spreads instantaneously across social platforms, reaching millions before organizations can formulate responses. Stakeholders demand immediate answers. Silence is interpreted as guilt. Every statement faces intense scrutiny. The window for effective intervention has shrunk from days to hours, and in some cases, minutes.
@@ -128,7 +128,7 @@ const CrisisCommunications = () => {
 
               <h3>Stakeholder Prioritization</h3>
               <p>
-                Not all stakeholders require identical messages or communication timing. Prioritization should reflect impact severity, relationship importance, and regulatory requirements. Employees typically receive priority notification—they represent front-line reputation defenders and information sources. Customers affected by the crisis need direct communication. Investors require transparency about financial implications. Media will publish with or without official statements, making proactive engagement essential. Regulators expect immediate notification when violations occur.
+                Not all stakeholders require identical messages or communication timing. Prioritization should reflect impact severity, relationship importance, and regulatory requirements. Employees typically receive priority notification-they represent front-line reputation defenders and information sources. Customers affected by the crisis need direct communication. Investors require transparency about financial implications. Media will publish with or without official statements, making proactive engagement essential. Regulators expect immediate notification when violations occur.
               </p>
               <p>
                 Coordinated outreach ensures consistent messaging while tailoring content to each audience's specific concerns and information needs. Contradictory statements to different stakeholders amplify crises rather than containing them.
@@ -144,13 +144,13 @@ const CrisisCommunications = () => {
 
               <h2>Channel Strategy During Crises</h2>
               <p>
-                Multi-channel coordination is critical. Organizations should activate owned channels first—company websites, email to stakeholder lists, employee communications platforms—ensuring authoritative information is available before social media speculation dominates narratives. Social media requires continuous monitoring and rapid response to misinformation and emerging questions.
+                Multi-channel coordination is critical. Organizations should activate owned channels first-company websites, email to stakeholder lists, employee communications platforms-ensuring authoritative information is available before social media speculation dominates narratives. Social media requires continuous monitoring and rapid response to misinformation and emerging questions.
               </p>
               <p>
                 Media relations during crises demands proactive engagement. Offering interviews, providing background information, and making subject matter experts available helps shape coverage. Responding to journalist inquiries within 30 minutes signals transparency and cooperation. Delayed responses or "no comment" positions create perception gaps that speculation fills.
               </p>
               <p>
-                Dark site preparation—pre-built crisis communication websites that can launch immediately—enables centralized information distribution when normal channels become overwhelmed. These sites serve as authoritative sources for media, stakeholders, and the public.
+                Dark site preparation-pre-built crisis communication websites that can launch immediately-enables centralized information distribution when normal channels become overwhelmed. These sites serve as authoritative sources for media, stakeholders, and the public.
               </p>
 
               <h2>Legal and Compliance Considerations</h2>
@@ -204,7 +204,7 @@ const CrisisCommunications = () => {
                 Crisis communications in 2026 demands speed, precision, and coordinated execution that traditional approaches struggle to deliver. Organizations investing in advanced monitoring, response automation, and integrated communication platforms gain significant advantages when reputation threats emerge. Those relying on manual processes and reactive postures face growing risks in environments where minutes matter and transparency is non-negotiable.
               </p>
               <p>
-                The question is not whether your organization will face a crisis, but whether you will be prepared to respond effectively when it occurs. The time to build crisis communications capabilities is before they are needed—when decisions can be made deliberately rather than desperately.
+                The question is not whether your organization will face a crisis, but whether you will be prepared to respond effectively when it occurs. The time to build crisis communications capabilities is before they are needed-when decisions can be made deliberately rather than desperately.
               </p>
             </div>
 

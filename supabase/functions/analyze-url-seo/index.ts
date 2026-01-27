@@ -85,7 +85,7 @@ CRITICAL STYLE MANDATES:
 - Write with the precision and authority of a senior communications director at a Fortune 100 firm
 - Every sentence must be direct, substantive, and actionable
 - Favor active voice, concrete nouns, and specific data over vague descriptors
-- Section headers use uppercase text only—no symbols or decorative elements
+- Section headers use uppercase text only-no symbols or decorative elements
 
 Analyze this webpage and generate comprehensive optimization recommendations:
 

@@ -94,7 +94,7 @@ const PRAutomationGuide = () => {
             {/* Article Content */}
             <div className="prose prose-slate dark:prose-invert max-w-none">
               <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                PR automation enables enterprise organizations to scale communications operations, reduce costs, maintain consistency, and respond faster to market dynamics—all without proportionally increasing headcount. This comprehensive guide explores how to implement automation across your PR workflows effectively.
+                PR automation enables enterprise organizations to scale communications operations, reduce costs, maintain consistency, and respond faster to market dynamics-all without proportionally increasing headcount. This comprehensive guide explores how to implement automation across your PR workflows effectively.
               </p>
 
               <h2>Understanding PR Automation</h2>
@@ -169,7 +169,7 @@ const PRAutomationGuide = () => {
 
               <h3>Implementation Approach</h3>
               <p>
-                Phased implementation reduces risk and builds organizational confidence. Begin with pilot programs targeting specific high-value, low-risk workflows—media monitoring automation or routine press release generation often work well as starting points. Measure results rigorously, documenting time savings, quality improvements, and cost reductions.
+                Phased implementation reduces risk and builds organizational confidence. Begin with pilot programs targeting specific high-value, low-risk workflows-media monitoring automation or routine press release generation often work well as starting points. Measure results rigorously, documenting time savings, quality improvements, and cost reductions.
               </p>
               <p>
                 Expand systematically based on pilot results. Train teams thoroughly on new workflows, providing hands-on practice and ongoing support. Expect 3-6 months for full adoption as teams adjust to new ways of working and develop trust in automated systems.
@@ -198,7 +198,7 @@ const PRAutomationGuide = () => {
 
               <h3>Quality Concerns</h3>
               <p>
-                Initial automated outputs may not meet quality standards, creating skepticism. Set realistic expectations—automation requires training periods where systems learn your brand voice, preferences, and standards. Implement robust review processes early, gradually reducing oversight as confidence builds. Choose platforms designed for enterprise quality standards rather than consumer-grade tools.
+                Initial automated outputs may not meet quality standards, creating skepticism. Set realistic expectations-automation requires training periods where systems learn your brand voice, preferences, and standards. Implement robust review processes early, gradually reducing oversight as confidence builds. Choose platforms designed for enterprise quality standards rather than consumer-grade tools.
               </p>
 
               <h3>Integration Complexity</h3>

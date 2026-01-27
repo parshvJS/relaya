@@ -173,7 +173,7 @@ const OutreachAutopilot = () => {
     },
     {
       question: 'Does this work for niche or technical industries?',
-      answer: 'Absolutely. Relaya adapts to any vertical—from fintech to healthcare, manufacturing to SaaS. The AI learns your industry\'s language and media landscape.'
+      answer: 'Absolutely. Relaya adapts to any vertical-from fintech to healthcare, manufacturing to SaaS. The AI learns your industry\'s language and media landscape.'
     },
     {
       question: 'Can I connect my own email?',
@@ -181,11 +181,11 @@ const OutreachAutopilot = () => {
     },
     {
       question: 'Do you guarantee media placements?',
-      answer: 'No one can guarantee placements—beware anyone who claims otherwise. We guarantee the work: verified contacts, personalized pitches, optimized delivery timing.'
+      answer: 'No one can guarantee placements-beware anyone who claims otherwise. We guarantee the work: verified contacts, personalized pitches, optimized delivery timing.'
     },
     {
       question: 'How do follow-ups work?',
-      answer: 'Follow-ups are non-intrusive and automatically stop when a journalist replies or engages. No annoying sequences—just professional persistence.'
+      answer: 'Follow-ups are non-intrusive and automatically stop when a journalist replies or engages. No annoying sequences-just professional persistence.'
     },
     {
       question: 'What languages are supported?',
@@ -288,7 +288,7 @@ const OutreachAutopilot = () => {
             </div>
 
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground mb-6 animate-fade-in" style={{ animationDelay: '100ms' }}>
-              Outreach on autopilot—
+              Outreach on autopilot-
               <br />
               <span className="gradient-text">while you sleep.</span>
             </h1>
@@ -465,7 +465,7 @@ const OutreachAutopilot = () => {
             </div>
 
             <p className="text-center text-muted-foreground mt-8">
-              Don't see your industry? Relaya adapts to any niche—from Real Estate to E-commerce.
+              Don't see your industry? Relaya adapts to any niche-from Real Estate to E-commerce.
             </p>
 
             <div className="text-center mt-6">

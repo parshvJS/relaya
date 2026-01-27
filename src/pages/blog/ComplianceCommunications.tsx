@@ -102,7 +102,7 @@ const ComplianceCommunications = () => {
                 Public companies, financial services firms, healthcare organizations, and enterprises in regulated industries face a complex web of communications requirements. The SEC mandates specific disclosure practices. GDPR imposes data privacy constraints. HIPAA restricts health information sharing. Industry-specific regulations add additional layers of complexity. Violations can result in significant fines, legal liability, and reputation damage.
               </p>
               <p>
-                Traditional communications workflows often treat compliance as an afterthought—content is created, then reviewed for regulatory issues before distribution. This approach creates bottlenecks, delays time-sensitive communications, and generates friction between communications teams seeking speed and legal teams prioritizing risk mitigation. Modern organizations need compliance-native approaches that build regulatory requirements into content generation processes from the start.
+                Traditional communications workflows often treat compliance as an afterthought-content is created, then reviewed for regulatory issues before distribution. This approach creates bottlenecks, delays time-sensitive communications, and generates friction between communications teams seeking speed and legal teams prioritizing risk mitigation. Modern organizations need compliance-native approaches that build regulatory requirements into content generation processes from the start.
               </p>
 
               <h2>Key Regulatory Frameworks</h2>
@@ -235,7 +235,7 @@ const ComplianceCommunications = () => {
                 <li>Conduct regular audits and continuous improvement</li>
               </ol>
               <p>
-                Organizations should prioritize highest-risk communications first—financial disclosures, regulatory filings, crisis communications—establishing robust processes before expanding to lower-risk content categories.
+                Organizations should prioritize highest-risk communications first-financial disclosures, regulatory filings, crisis communications-establishing robust processes before expanding to lower-risk content categories.
               </p>
 
               <h2>Conclusion</h2>

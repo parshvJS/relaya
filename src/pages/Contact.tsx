@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -43,9 +43,6 @@ Message:
 ${formData.message}
       `.trim();
 
-      // Get website domain
-      const website = window.location.hostname;
-
       // Send POST request to API
       const response = await fetch('https://backend.jamesscott.tech/webhook/contact-form-uni', {
         method: 'POST',
@@ -54,7 +51,7 @@ ${formData.message}
         },
         body: JSON.stringify({
           body: bodyText,
-          website: website
+          website: 'relayapr.com'
         })
       });
 
@@ -109,7 +106,6 @@ ${formData.message}
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    placeholder="John"
                     required
                   />
                 </div>
@@ -119,7 +115,6 @@ ${formData.message}
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    placeholder="Doe"
                     required
                   />
                 </div>
@@ -131,7 +126,6 @@ ${formData.message}
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="john@example.com"
                   required
                 />
               </div>
@@ -141,7 +135,6 @@ ${formData.message}
                   name="company"
                   value={formData.company}
                   onChange={handleChange}
-                  placeholder="Your Company"
                   required
                 />
               </div>
@@ -165,54 +158,10 @@ ${formData.message}
           {/* Contact Info */}
           <div className="order-1 md:order-2 space-y-8">
             <div>
-              <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Email</h3>
-                    <p className="text-muted-foreground">contact@relaya.com</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Phone</h3>
-                    <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Address</h3>
-                    <p className="text-muted-foreground">
-                      123 Business Street<br />
-                      San Francisco, CA 94102<br />
-                      United States
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-8 border-t">
-              <h3 className="font-semibold mb-4">Business Hours</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Monday - Friday</span>
-                  <span>9:00 AM - 6:00 PM PST</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Saturday - Sunday</span>
-                  <span>Closed</span>
-                </div>
-              </div>
+              <h2 className="text-2xl font-bold mb-6">Get in Touch</h2>
+              <p className="text-muted-foreground">
+                Fill out the form and we'll get back to you as soon as possible. We're here to answer any questions you may have about our services.
+              </p>
             </div>
           </div>
         </div>

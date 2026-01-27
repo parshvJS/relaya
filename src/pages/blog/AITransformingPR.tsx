@@ -166,7 +166,7 @@ const AITransformingPR = () => {
 
               <h2>Conclusion</h2>
               <p>
-                AI is not merely automating existing PR processes—it is enabling entirely new approaches to strategic communications that were previously impossible. Organizations that embrace AI-powered PR platforms gain significant advantages in speed, scale, consistency, and compliance while reducing costs and operational complexity. As the technology continues to advance, the gap between AI-enabled organizations and those relying on traditional methods will only widen.
+                AI is not merely automating existing PR processes-it is enabling entirely new approaches to strategic communications that were previously impossible. Organizations that embrace AI-powered PR platforms gain significant advantages in speed, scale, consistency, and compliance while reducing costs and operational complexity. As the technology continues to advance, the gap between AI-enabled organizations and those relying on traditional methods will only widen.
               </p>
               <p>
                 The question for enterprise PR leaders is not whether to adopt AI, but how quickly to implement it and how comprehensively to leverage its capabilities. Those who move decisively will establish competitive advantages that become increasingly difficult for laggards to overcome.

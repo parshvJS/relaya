@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -215,12 +216,8 @@ const AcceptableUse = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">11. Contact Information</h2>
               <p className="text-muted-foreground">
-                For questions about this Acceptable Use Policy, contact us at:
+                For questions about this Acceptable Use Policy, please <Link to="/contact" className="text-primary hover:underline">contact us</Link>.
               </p>
-              <div className="mt-4 text-muted-foreground">
-                <p>Email: legal@relaya.com</p>
-                <p>Address: [Your Business Address]</p>
-              </div>
             </section>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -201,12 +202,8 @@ const TermsOfService = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">16. Contact Information</h2>
               <p className="text-muted-foreground">
-                For questions about these Terms, contact us at:
+                For questions about these Terms, please <Link to="/contact" className="text-primary hover:underline">contact us</Link>.
               </p>
-              <div className="mt-4 text-muted-foreground">
-                <p>Email: legal@relaya.com</p>
-                <p>Address: [Your Business Address]</p>
-              </div>
             </section>
           </div>
         </div>
