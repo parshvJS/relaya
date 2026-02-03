@@ -188,21 +188,14 @@ const AcceptableUse = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">8. Reporting Violations</h2>
               <p className="text-muted-foreground mb-4">
-                If you become aware of content or activity that violates this policy, please report it immediately to:
-              </p>
-              <div className="mt-4 text-muted-foreground">
-                <p>Email: abuse@relaya.com</p>
-                <p>Subject: Acceptable Use Policy Violation Report</p>
-              </div>
-              <p className="text-muted-foreground mt-4">
-                Include details about the violation and any relevant evidence or documentation.
+                If you become aware of content or activity that violates this policy, please report it immediately by <Link to="/contact" className="text-primary hover:underline">contacting us</Link>. Include details about the violation and any relevant evidence or documentation in your report.
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">9. Appeals</h2>
               <p className="text-muted-foreground">
-                If your account is suspended or terminated, you may appeal the decision by contacting us at appeals@relaya.com with a detailed explanation and any supporting documentation. We will review appeals on a case-by-case basis.
+                If your account is suspended or terminated, you may appeal the decision by <Link to="/contact" className="text-primary hover:underline">contacting us</Link> with a detailed explanation and any supporting documentation. We will review appeals on a case-by-case basis.
               </p>
             </section>
 

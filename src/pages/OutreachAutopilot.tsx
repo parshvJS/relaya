@@ -10,8 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -24,7 +23,6 @@ const CALENDLY_URL = 'https://calendly.com/your-username/strategy-call';
 const OutreachAutopilot = () => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
   const [contactForm, setContactForm] = useState({
     name: '',
     email: '',
@@ -70,7 +68,7 @@ const OutreachAutopilot = () => {
     {
       icon: Clock,
       title: 'Prime Time Delivery',
-      description: 'Schedules sends during New York media hours for maximum open rates.'
+      description: 'Schedules sends during optimal media hours for maximum open rates.'
     },
   ];
 
@@ -210,63 +208,64 @@ const OutreachAutopilot = () => {
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate required fields
     if (!contactForm.name.trim() || !contactForm.email.trim() || !contactForm.inquiryType || !contactForm.message.trim()) {
-      toast({
-        title: "Missing Fields",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
+      toast.error('Please fill in all required fields.');
       return;
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(contactForm.email)) {
-      toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address.",
-        variant: "destructive",
-      });
+      toast.error('Please enter a valid email address.');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('submit-contact', {
-        body: {
-          name: contactForm.name,
-          email: contactForm.email,
-          website: contactForm.website,
-          inquiryType: contactForm.inquiryType,
-          message: contactForm.message,
+      // Create readable text body from form data
+      const bodyText = `
+Outreach Autopilot Contact Form Submission
+
+Name: ${contactForm.name}
+Email: ${contactForm.email}
+Website: ${contactForm.website || 'Not provided'}
+Inquiry Type: ${contactForm.inquiryType}
+
+Message:
+${contactForm.message}
+      `.trim();
+
+      // Send POST request to API
+      const response = await fetch('https://backend.jamesscott.tech/webhook/contact-form-uni', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          body: bodyText,
+          website: 'relayapr.com'
+        })
       });
 
-      if (error) throw error;
-
-      toast({
-        title: "Message Sent",
-        description: data.message || "We've received your message and will be in touch soon.",
-      });
-
-      // Reset form
-      setContactForm({
-        name: '',
-        email: '',
-        website: '',
-        inquiryType: '',
-        message: ''
-      });
-    } catch (error: any) {
-      console.error('Error submitting contact form:', error);
-      toast({
-        title: "Submission Failed",
-        description: error.message || "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
+      if (response.status === 200) {
+        toast.success('Message sent successfully!');
+        // Reset form
+        setContactForm({
+          name: '',
+          email: '',
+          website: '',
+          inquiryType: '',
+          message: ''
+        });
+      } else {
+        toast.error('Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('An error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

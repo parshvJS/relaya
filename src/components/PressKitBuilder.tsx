@@ -306,7 +306,7 @@ const PressKitBuilder = () => {
                     id="headquarters"
                     value={data.headquarters}
                     onChange={(e) => updateField('headquarters', e.target.value)}
-                    placeholder="San Francisco, CA"
+                    placeholder="Company headquarters"
                     className="input-modern"
                   />
                 </div>

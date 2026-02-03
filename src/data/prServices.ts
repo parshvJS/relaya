@@ -665,9 +665,9 @@ export const PR_SERVICES: PRService[] = [
         { value: 'employees', label: 'Employees' },
       ]},
       { name: 'jurisdictions', label: 'Jurisdictions Involved', type: 'multiselect', required: false, options: [
-        { value: 'gdpr', label: 'GDPR (EU)' },
-        { value: 'sec', label: 'SEC (US)' },
-        { value: 'ccpa', label: 'CCPA (California)' },
+        { value: 'gdpr', label: 'GDPR' },
+        { value: 'sec', label: 'SEC' },
+        { value: 'ccpa', label: 'CCPA' },
       ]},
     ],
     outputs: [
@@ -1411,9 +1411,9 @@ export const PR_SERVICES: PRService[] = [
         { value: 'financial', label: 'Financial Disclosure' },
       ]},
       { name: 'jurisdictions', label: 'Jurisdictions', type: 'multiselect', required: true, options: [
-        { value: 'us', label: 'United States' },
-        { value: 'eu', label: 'European Union' },
-        { value: 'uk', label: 'United Kingdom' },
+        { value: 'us', label: 'Jurisdiction A' },
+        { value: 'eu', label: 'Jurisdiction B' },
+        { value: 'uk', label: 'Jurisdiction C' },
         { value: 'global', label: 'Global' },
       ]},
       { name: 'industry', label: 'Industry', type: 'select', required: true, options: [
@@ -1455,9 +1455,9 @@ export const PR_SERVICES: PRService[] = [
       ]},
       { name: 'context', label: 'Context', type: 'textarea', required: true, placeholder: 'Where will this disclosure appear?' },
       { name: 'jurisdictions', label: 'Jurisdictions', type: 'multiselect', required: true, options: [
-        { value: 'us', label: 'United States' },
-        { value: 'eu', label: 'European Union' },
-        { value: 'uk', label: 'United Kingdom' },
+        { value: 'us', label: 'Jurisdiction A' },
+        { value: 'eu', label: 'Jurisdiction B' },
+        { value: 'uk', label: 'Jurisdiction C' },
       ]},
     ],
     outputs: [
@@ -1561,10 +1561,10 @@ export const PR_SERVICES: PRService[] = [
     ],
     inputs: [
       { name: 'jurisdictions', label: 'Jurisdictions', type: 'multiselect', required: true, options: [
-        { value: 'us_federal', label: 'US Federal' },
-        { value: 'us_state', label: 'US State' },
-        { value: 'eu', label: 'EU' },
-        { value: 'uk', label: 'UK' },
+        { value: 'us_federal', label: 'Federal Level' },
+        { value: 'us_state', label: 'State Level' },
+        { value: 'eu', label: 'Regional A' },
+        { value: 'uk', label: 'Regional B' },
       ]},
       { name: 'topics', label: 'Topics', type: 'multiselect', required: true, options: [
         { value: 'data_privacy', label: 'Data Privacy' },

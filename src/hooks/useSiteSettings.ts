@@ -33,7 +33,7 @@ const defaultSettings: SiteSettings = {
   general: {
     siteName: 'RELAYA',
     siteDescription: 'AI-Powered PR & Media Outreach Platform',
-    supportEmail: 'support@relaya.com',
+    supportEmail: '',
     calendlyUrl: 'https://calendly.com/your-username/strategy-call'
   },
   notifications: {

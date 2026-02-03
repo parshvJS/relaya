@@ -128,7 +128,7 @@ const PrivacyPolicy = () => {
                 <li><strong>Withdrawal of Consent:</strong> Withdraw consent where processing is based on consent</li>
               </ul>
               <p className="text-muted-foreground mt-4">
-                To exercise these rights, contact us at privacy@relaya.com
+                To exercise these rights, please <Link to="/contact" className="text-primary hover:underline">contact us</Link>.
               </p>
             </section>
 

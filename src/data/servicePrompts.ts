@@ -2164,7 +2164,7 @@ Scan all content for regulatory compliance across jurisdictions. Flag violations
 INPUT SCHEMA PROCESSING:
 - content: Material for compliance review
 - content_type: {Press Release, Marketing, Social, Financial}
-- jurisdictions: {US, EU, UK, Global}
+- jurisdictions: {Jurisdiction A, Jurisdiction B, Jurisdiction C, Global}
 - industry: Sector-specific regulations
 
 DECISION LOGIC:
@@ -2208,7 +2208,7 @@ Generate required disclosures for all content types and jurisdictions. Ensure pr
 INPUT SCHEMA PROCESSING:
 - disclosure_type: {Financial, Product, Privacy, Legal}
 - context: Content and placement location
-- jurisdictions: {US, EU, UK} applicable regulations
+- jurisdictions: {Jurisdiction A, Jurisdiction B, Jurisdiction C} applicable regulations
 - content_format: Display medium requirements
 
 DECISION LOGIC:
@@ -2384,7 +2384,7 @@ Ensure all content meets regulatory and legal requirements before publication. F
 INPUT SCHEMA PROCESSING:
 - content: Material for compliance review
 - content_type: {Press Release, Marketing, Social, Financial}
-- jurisdictions: {US, EU, UK, Global}
+- jurisdictions: {Jurisdiction A, Jurisdiction B, Jurisdiction C, Global}
 - industry: Sector-specific regulations
 
 DECISION LOGIC:
@@ -2514,7 +2514,7 @@ OPERATIONAL MANDATE:
 Keep organizations ahead of regulatory changes affecting PR and communications. Track proposed and enacted regulations, assess impact, and recommend actions.
 
 INPUT SCHEMA PROCESSING:
-- jurisdictions: {US Federal, US State, EU, UK} monitoring scope
+- jurisdictions: {Federal Level, State Level, Regional A, Regional B} monitoring scope
 - topics: {Data Privacy, Securities, Advertising, Environmental}
 - industry_focus: Sector-specific regulations
 - alert_preferences: Notification thresholds
