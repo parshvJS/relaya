@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
@@ -55,6 +56,35 @@ const Pricing = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Pricing Plans - AI PR Platform Pricing | RELAYA</title>
+        <meta name="description" content="Transparent pricing for AI-powered enterprise PR services. Choose from Starter ($99/mo), Professional ($299/mo), or Enterprise plans. All plans include compliance-ready content generation." />
+        <link rel="canonical" href="https://relaya.com/pricing" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/pricing" />
+        <meta property="og:title" content="Pricing Plans - AI PR Platform" />
+        <meta property="og:description" content="Simple, transparent pricing for enterprise PR automation. Starter, Professional, and Enterprise plans available." />
+        <meta property="og:image" content="https://relaya.com/favicon.jpeg" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Pricing Plans - AI PR Platform" />
+        <meta name="twitter:description" content="Transparent pricing for enterprise PR automation." />
+
+        {/* JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "RELAYA Pricing",
+            "description": "Transparent pricing plans for AI-powered enterprise PR services",
+            "url": "https://relaya.com/pricing"
+          })}
+        </script>
+      </Helmet>
+
       <Header />
       <ScrollToTop />
       <div className="min-h-screen bg-background">

@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Zap, Shield, Sparkles, BarChart, Globe, Users } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -39,6 +40,35 @@ const Features = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Platform Features - AI PR Automation Tools | RELAYA</title>
+        <meta name="description" content="Explore RELAYA's powerful features: lightning-fast content generation, ARCS compliance verification, brand voice consistency, advanced analytics, multi-channel distribution, and team collaboration." />
+        <link rel="canonical" href="https://relaya.com/features" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/features" />
+        <meta property="og:title" content="Platform Features - AI PR Automation Tools" />
+        <meta property="og:description" content="Lightning-fast content generation, compliance verification, brand voice consistency, and advanced analytics for enterprise PR." />
+        <meta property="og:image" content="https://relaya.com/favicon.jpeg" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Platform Features - AI PR Automation" />
+        <meta name="twitter:description" content="Powerful AI features for enterprise PR operations." />
+
+        {/* JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "RELAYA Platform Features",
+            "description": "Comprehensive features for AI-powered enterprise PR including compliance verification, brand voice consistency, and team collaboration",
+            "url": "https://relaya.com/features"
+          })}
+        </script>
+      </Helmet>
+
       <Header />
       <ScrollToTop />
       <div className="min-h-screen bg-background">

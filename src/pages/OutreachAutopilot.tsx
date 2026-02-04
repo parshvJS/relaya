@@ -612,7 +612,7 @@ ${contactForm.message}
                     <Input
                       id="email"
                       type="email"
-                      placeholder="you@company.com"
+                      placeholder="Enter your email"
                       value={contactForm.email}
                       onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                       className="input-modern"

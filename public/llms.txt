@@ -1,78 +1,44 @@
-# RELAYA - Enterprise AI-Powered PR Platform
+# RELAYA - AI-Powered Enterprise PR Platform
 
-RELAYA is an autonomous, surgical, and efficient AI-powered public relations platform delivering enterprise-grade PR services with compliance-ready outputs at scale. Built for C-suite executives and organizations requiring institutional-grade strategic communications.
+RELAYA is an enterprise-grade public relations platform that delivers autonomous, compliance-ready strategic communications powered by artificial intelligence. The platform provides 50+ PR services across 10 capability layers, enabling organizations to generate boardroom-grade content at scale while maintaining complete regulatory compliance.
 
-## What RELAYA Provides
+## Core Services
 
-RELAYA offers a comprehensive communications infrastructure with 50+ PR services organized across 10 strategic capability layers, replacing traditional agency models with deterministic AI-native communications systems.
-
-### Core Platform Features
-
-- **Autonomous PR Operations**: Self-directing AI systems that transform executive intent into market-ready communications
-- **Compliance-Grade Outputs**: SEC, GDPR, HIPAA-ready content generation with immutable audit trails
-- **Board-Ready Quality**: Zero hallucination architecture delivering institutional-grade precision
-- **24/7 Crisis Response**: Continuous availability for real-time crisis management and communications
-- **Enterprise Security**: Bank-grade encryption, role-based access controls, complete data sovereignty
-
-### 10 Capability Layers
-
-1. **Narrative Engineering**: Strategic messaging and brand story architecture
-2. **Media Power Mapping**: Journalist relationship intelligence and media landscape analysis
-3. **Executive Authority**: Thought leadership and C-suite positioning
-4. **Crisis Neutralization**: Real-time crisis management and defensive communications
-5. **Stakeholder Alignment**: Investor relations and stakeholder engagement
-6. **Brand Intelligence**: Competitive positioning and market perception analysis
-7. **Media Amplification**: Multi-channel distribution and earned media optimization
-8. **Compliance Automation**: Regulatory-ready content generation and approval workflows
-9. **Defensive Disclosure**: Risk mitigation and transparent communications
-10. **Internal Alignment**: Employee communications and organizational messaging
+- **Narrative Engineering**: Strategic message development, press release generation, and executive positioning content with ARCS compliance verification
+- **Media Power Mapping**: Intelligent journalist targeting, media database access, and relationship management tools
+- **Executive Authority**: C-suite thought leadership, executive bio creation, and spokesperson training resources
+- **Crisis Neutralization**: Real-time crisis response protocols, holding statements, and stakeholder communication templates
+- **Stakeholder Alignment**: Investor relations materials, analyst briefings, and shareholder communications
+- **Brand Intelligence**: Brand voice training, messaging consistency tools, and style guide integration
+- **Media Amplification**: Multi-channel distribution automation, social media publishing, and engagement tracking
+- **Compliance Automation**: SEC, GDPR, HIPAA-ready content generation with immutable audit trails
+- **Defensive Disclosure**: Pre-emptive disclosure strategies and regulatory filing support
+- **Internal Alignment**: Employee communications, change management messaging, and internal announcement templates
 
 ## Key Pages
 
-- [Home](/) - Platform overview, service catalog, and interactive PR tools
-- [About](/about) - Company mission, core principles, platform capabilities, and differentiators
-- [Privacy Policy](/privacy) - Data protection and privacy practices
-- [Terms of Service](/terms) - Usage terms and service agreement
-- [Cookie Policy](/cookies) - Cookie usage and tracking information
-- [Acceptable Use Policy](/acceptable-use) - Platform usage guidelines and restrictions
+https://relaya.com/ - Main platform overview with full service catalog and interactive PR tools including press kit builder, brand voice trainer, campaign planner, and SEO analyzer
 
-## Professional Toolkit
+https://relaya.com/about - Platform mission, core principles (compliance-first architecture, deterministic precision, strategic autonomy), and organizational philosophy
 
-RELAYA includes enterprise-grade tools for comprehensive PR operations:
+https://relaya.com/services - Detailed breakdown of press release generation, campaign management, brand voice training, and media outreach automation capabilities
 
-- **Press Kit Builder**: Generate comprehensive media kits with brand assets and executive bios
-- **Brand Voice Trainer**: AI training on specific brand voice for consistent messaging across channels
-- **Campaign Planner**: AI-powered campaign orchestration with milestone tracking and analytics
-- **Social Media Publisher**: Multi-platform content distribution and scheduling
-- **Image Generator**: AI-powered visual content creation for PR campaigns
-- **SEO Analyzer**: Competitive analysis and content optimization powered by Firecrawl
-- **Competitor Analyzer**: Multi-domain SEO comparison and competitive intelligence
+https://relaya.com/features - Platform features including lightning-fast content generation, ARCS compliance verification, brand voice consistency, analytics dashboard, and team collaboration tools
 
-## Target Audience
+https://relaya.com/pricing - Pricing tiers (Starter, Professional, Enterprise) with feature comparisons and capability limits
 
-- C-suite executives requiring boardroom-grade communications
-- Enterprise organizations needing compliance-ready PR at scale
-- Public companies with regulatory reporting requirements
-- Organizations managing crisis communications and reputation
-- Companies replacing traditional PR agencies with AI-native solutions
+https://relaya.com/contact - Direct contact form for enterprise inquiries and platform demonstrations
 
-## Technical Infrastructure
+https://relaya.com/blog - Educational content covering AI in public relations, PR automation strategies, crisis communications, and compliance best practices
 
-- Built on React with TypeScript for enterprise reliability
-- Deterministic AI outputs with full audit trails
-- Compliance-first architecture for regulated industries
-- Role-based access controls and enterprise security
-- Real-time collaboration and approval workflows
+https://relaya.com/blog/ai-transforming-enterprise-pr-2026 - In-depth analysis of how artificial intelligence is revolutionizing enterprise PR operations through automation and predictive analytics
 
-## Use Cases
+https://relaya.com/blog/complete-guide-pr-automation - Comprehensive guide to implementing PR automation in enterprise organizations
 
-RELAYA is designed for organizations that need to:
-- Deploy strategic communications at global velocity
-- Maintain complete control over messaging and stakeholder touchpoints
-- Generate compliance-grade content for regulatory scrutiny
-- Respond to crises with real-time communications capabilities
-- Replace unpredictable agency relationships with autonomous systems
-- Scale PR operations without scaling headcount
-- Ensure message consistency across all channels and geographies
+https://relaya.com/blog/crisis-communications-digital-age - Best practices for managing crisis communications in real-time with modern tools
 
-For questions about specific PR services, capabilities, or platform features, refer to the homepage service catalog organized by capability layer.
+https://relaya.com/blog/building-compliance-ready-communications-strategy - Strategic framework for generating SEC, GDPR, and HIPAA-compliant content
+
+https://relaya.com/privacy - Privacy policy detailing data protection practices and information handling procedures
+
+https://relaya.com/terms - Terms of service governing platform use and service agreements

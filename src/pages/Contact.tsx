@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -78,6 +79,35 @@ ${formData.message}
 
   return (
     <>
+      <Helmet>
+        <title>Contact Us - Get in Touch with RELAYA | Enterprise PR</title>
+        <meta name="description" content="Contact RELAYA for enterprise PR solutions. Get answers to your questions about AI-powered PR automation, compliance-ready content generation, and platform demonstrations." />
+        <link rel="canonical" href="https://relaya.com/contact" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/contact" />
+        <meta property="og:title" content="Contact Us - Get in Touch with RELAYA" />
+        <meta property="og:description" content="Contact RELAYA for enterprise PR solutions and platform demonstrations." />
+        <meta property="og:image" content="https://relaya.com/favicon.jpeg" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Us - RELAYA" />
+        <meta name="twitter:description" content="Get in touch with RELAYA for enterprise PR solutions." />
+
+        {/* JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            "name": "Contact RELAYA",
+            "description": "Contact form for enterprise PR inquiries and platform demonstrations",
+            "url": "https://relaya.com/contact"
+          })}
+        </script>
+      </Helmet>
+
       <Header />
       <ScrollToTop />
       <div className="min-h-screen bg-background">

@@ -431,7 +431,7 @@ const PressKitBuilder = () => {
                     id="mediaEmail"
                     value={data.mediaEmail}
                     onChange={(e) => updateField('mediaEmail', e.target.value)}
-                    placeholder="press@example.com"
+                    placeholder="Enter media contact email"
                     className="input-modern"
                   />
                 </div>
@@ -441,7 +441,7 @@ const PressKitBuilder = () => {
                     id="mediaPhone"
                     value={data.mediaPhone}
                     onChange={(e) => updateField('mediaPhone', e.target.value)}
-                    placeholder="+1 (555) 123-4567"
+                    placeholder="Enter contact phone"
                     className="input-modern"
                   />
                 </div>

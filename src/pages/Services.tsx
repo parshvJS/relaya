@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Check } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -53,6 +54,40 @@ const Services = () => {
 
   return (
     <>
+      <Helmet>
+        <title>PR Services - AI-Powered Enterprise Solutions | RELAYA</title>
+        <meta name="description" content="Comprehensive AI-powered PR services including press release generation, campaign management, brand voice training, and automated media outreach. Enterprise-grade compliance-ready content." />
+        <link rel="canonical" href="https://relaya.com/services" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://relaya.com/services" />
+        <meta property="og:title" content="PR Services - AI-Powered Enterprise Solutions" />
+        <meta property="og:description" content="Comprehensive AI-powered PR services including press release generation, campaign management, and automated media outreach." />
+        <meta property="og:image" content="https://relaya.com/favicon.jpeg" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="PR Services - AI-Powered Enterprise Solutions" />
+        <meta name="twitter:description" content="AI-powered PR services for enterprise organizations." />
+
+        {/* JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": "RELAYA PR Services",
+            "description": "Comprehensive AI-powered PR services including press release generation, campaign management, brand voice training, and media outreach automation",
+            "provider": {
+              "@type": "Organization",
+              "name": "RELAYA"
+            },
+            "areaServed": "Worldwide",
+            "serviceType": "Public Relations Services"
+          })}
+        </script>
+      </Helmet>
+
       <Header />
       <ScrollToTop />
       <div className="min-h-screen bg-background">
