@@ -7,6 +7,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    allowedHosts: ["8080-ihk3h3zjrnqk8xknkwpjo-ac5f8cb4.sg1.manus.computer"],
     hmr: {
       overlay: false,
     },
