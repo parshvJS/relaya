@@ -111,9 +111,9 @@ const QuickActions = () => {
           <button
             key={action.label}
             onClick={action.onClick}
-            className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:bg-accent transition-colors text-center group"
+            className="flex flex-col items-center gap-2 p-4 border border-border bg-card hover:bg-accent transition-colors text-center group"
           >
-            <div className={`w-10 h-10 rounded-lg ${action.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+            <div className={`w-10 h-10 ${action.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
               <action.icon className="h-5 w-5" />
             </div>
             <div>

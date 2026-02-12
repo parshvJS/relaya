@@ -107,8 +107,8 @@ const AdminAnalytics = () => {
       <div className="space-y-6">
         <Skeleton className="h-8 w-48" />
         <div className="grid lg:grid-cols-2 gap-6">
-          <Skeleton className="h-80 rounded-xl" />
-          <Skeleton className="h-80 rounded-xl" />
+          <Skeleton className="h-80" />
+          <Skeleton className="h-80" />
         </div>
         <Skeleton className="h-80 rounded-xl" />
       </div>
@@ -139,7 +139,7 @@ const AdminAnalytics = () => {
       {/* Charts Grid */}
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Leads by Type */}
-        <div className="bg-card rounded-xl border border-border p-6">
+        <div className="bg-card border border-border p-6">
           <h3 className="text-lg font-semibold text-foreground mb-4">Leads by Type</h3>
           {typeData.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
@@ -169,7 +169,7 @@ const AdminAnalytics = () => {
         </div>
 
         {/* Leads by Status */}
-        <div className="bg-card rounded-xl border border-border p-6">
+        <div className="bg-card border border-border p-6">
           <h3 className="text-lg font-semibold text-foreground mb-4">Leads by Status</h3>
           {statusData.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
@@ -177,14 +177,14 @@ const AdminAnalytics = () => {
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                 <XAxis dataKey="name" className="text-xs" />
                 <YAxis className="text-xs" />
-                <Tooltip 
-                  contentStyle={{ 
+                <Tooltip
+                  contentStyle={{
                     backgroundColor: 'hsl(var(--card))',
                     border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    borderRadius: '0'
                   }}
                 />
-                <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="value" fill="hsl(var(--primary))" radius={[0, 0, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -209,11 +209,11 @@ const AdminAnalytics = () => {
                 interval="preserveStartEnd"
               />
               <YAxis className="text-xs" />
-              <Tooltip 
-                contentStyle={{ 
+              <Tooltip
+                contentStyle={{
                   backgroundColor: 'hsl(var(--card))',
                   border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px'
+                  borderRadius: '0'
                 }}
               />
               <Line 

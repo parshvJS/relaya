@@ -1,15 +1,21 @@
 import { Menu, X, LogIn, LayoutDashboard } from 'lucide-react';
 import { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import logo from '@/assets/logo.png';
+import { useTheme } from '@/hooks/useTheme';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  const { user, loading } = useAuth();
+  const isDarkMode = useTheme();
+
+  // Check if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, [location]);
 
   // Track scroll progress
   useEffect(() => {
@@ -30,6 +36,7 @@ const Header = () => {
     { label: 'Services', href: '/services', isRoute: true },
     { label: 'Pricing', href: '/pricing', isRoute: true },
     { label: 'Features', href: '/features', isRoute: true },
+    { label: 'Campaign', href: '/campaign', isRoute: true },
     { label: 'About', href: '/about', isRoute: true },
     { label: 'Contact', href: '/contact', isRoute: true },
   ];
@@ -87,7 +94,7 @@ const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
           <img
-            src={logo}
+            src={isDarkMode ? '/logo-white.svg' : '/logo-black.svg'}
             alt="Relaya Logo"
             className="h-16  object-contain transition-transform group-hover:scale-105"
           />
@@ -130,8 +137,8 @@ const Header = () => {
 
         {/* CTA Button */}
         <div className="hidden md:flex items-center gap-3">
-          {!loading && user ? (
-            <Link 
+          {isLoggedIn ? (
+            <Link
               to="/dashboard"
               className="btn-primary text-sm px-4 py-2 transition-transform duration-200 hover:scale-105 flex items-center gap-2"
             >
@@ -139,8 +146,8 @@ const Header = () => {
               Dashboard
             </Link>
           ) : (
-            <Link 
-              to="/auth"
+            <Link
+              to="/user/login"
               className="btn-primary text-sm px-4 py-2 transition-transform duration-200 hover:scale-105 flex items-center gap-2"
             >
               <LogIn className="w-4 h-4" />
@@ -200,8 +207,8 @@ const Header = () => {
                 </button>
               )
             ))}
-            {!loading && user ? (
-              <Link 
+            {isLoggedIn ? (
+              <Link
                 to="/dashboard"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="btn-primary text-sm px-4 py-3 mt-2 animate-fade-in text-center flex items-center justify-center gap-2"
@@ -211,8 +218,8 @@ const Header = () => {
                 Dashboard
               </Link>
             ) : (
-              <Link 
-                to="/auth"
+              <Link
+                to="/user/login"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="btn-primary text-sm px-4 py-3 mt-2 animate-fade-in text-center flex items-center justify-center gap-2"
                 style={{ animationDelay: '200ms' }}

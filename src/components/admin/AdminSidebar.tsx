@@ -71,10 +71,10 @@ const AdminSidebar = ({ collapsed, onToggle }: AdminSidebarProps) => {
               to={item.path}
               end={item.path === '/admin'}
               className={({ isActive }) => cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
+                "flex items-center gap-3 px-3 py-2.5 transition-colors",
                 "hover:bg-muted/50",
-                isActive 
-                  ? "bg-primary/10 text-primary font-medium" 
+                isActive
+                  ? "bg-primary/10 text-primary font-medium"
                   : "text-muted-foreground"
               )}
             >

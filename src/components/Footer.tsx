@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import logo from '@/assets/logo.png';
+import { useTheme } from '@/hooks/useTheme';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const isDarkMode = useTheme();
 
   const footerLinks = {
     product: [
@@ -33,7 +34,7 @@ const Footer = () => {
           <div className="col-span-2">
             <a href="/" className="flex items-center gap-2 mb-4">
               <img
-                src={logo}
+                src={isDarkMode ? '/logo-white.svg' : '/logo-black.svg'}
                 alt="Relaya Logo"
                 className="h-20 w-auto object-contain"
               />

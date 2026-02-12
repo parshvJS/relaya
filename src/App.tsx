@@ -12,7 +12,6 @@ import Services from "./pages/Services";
 import Pricing from "./pages/Pricing";
 import Features from "./pages/Features";
 import Contact from "./pages/Contact";
-import Auth from "./pages/Auth";
 import Blog from "./pages/Blog";
 import AITransformingPR from "./pages/blog/AITransformingPR";
 import PRAutomationGuide from "./pages/blog/PRAutomationGuide";
@@ -34,6 +33,10 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminContent from "./pages/admin/AdminContent";
+import Login from "./pages/user/Login";
+import CreateAccount from "./pages/user/CreateAccount";
+import Campaign from "./pages/Campaign";
+import CreateNewCampaign from "./pages/campaign/CreateNewCampaign";
 
 const queryClient = new QueryClient();
 
@@ -53,9 +56,14 @@ const App = () => (
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/features" element={<Features />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/auth" element={<Auth />} />
+            <Route path="/campaign" element={<Campaign />} />
+            <Route path="/campaign/create-new-campaign" element={<CreateNewCampaign />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
+
+            {/* User Auth Routes */}
+            <Route path="/user/login" element={<Login />} />
+            <Route path="/user/create-new-account" element={<CreateAccount />} />
             <Route path="/outreach-autopilot" element={<OutreachAutopilot />} />
 
             {/* Blog Routes */}

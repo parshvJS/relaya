@@ -166,7 +166,7 @@ const AdminLeads = () => {
           <Skeleton className="h-10 w-32" />
           <Skeleton className="h-10 w-32" />
         </div>
-        <Skeleton className="h-[500px] rounded-xl" />
+        <Skeleton className="h-[500px]" />
       </div>
     );
   }

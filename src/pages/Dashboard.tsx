@@ -1,25 +1,29 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Search, 
-  Layers, 
-  Zap, 
-  Shield, 
-  BarChart3, 
-  Globe, 
-  Trophy, 
-  FileText, 
-  Sparkles, 
-  Calendar, 
-  Send, 
-  Image, 
+import {
+  Search,
+  Layers,
+  Zap,
+  Shield,
+  BarChart3,
+  Globe,
+  Trophy,
+  FileText,
+  Sparkles,
+  Calendar,
+  Send,
+  Image,
   Images,
   LogOut,
   User,
   Settings,
   ChevronDown,
   Menu,
-  X
+  X,
+  Moon,
+  Sun,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -45,41 +49,82 @@ import SocialMediaPublisher from '@/components/SocialMediaPublisher';
 import ImageGenerator from '@/components/ImageGenerator';
 import ImageGallery from '@/components/ImageGallery';
 import ScrollToTop from '@/components/ScrollToTop';
-import { useAuth } from '@/hooks/useAuth';
+import CreateCampaignForm from '@/components/campaign/CreateCampaignForm';
 import type { PRService } from '@/data/prServices';
-import logo from '@/assets/logo.png';
-import AIApiClient from '@/lib/aiApiClient';
+import { useToast } from '@/hooks/use-toast';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user, profile, signOut, loading } = useAuth();
+  const { toast } = useToast();
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLayer, setSelectedLayer] = useState<number | null>(null);
   const [selectedService, setSelectedService] = useState<PRService | null>(null);
   const [activeTab, setActiveTab] = useState('services');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [showCampaignForm, setShowCampaignForm] = useState(false);
   const galleryRefreshRef = useRef<(() => void) | null>(null);
 
+  // Check for saved theme preference or default to light mode
   useEffect(() => {
-    if (!loading && !user) {
-      navigate('/auth');
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    setIsDarkMode(shouldBeDark);
+    if (shouldBeDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
-  }, [user, loading, navigate]);
 
-  // Initialize AI API client when dashboard loads
-  useEffect(() => {
-    if (user && !loading) {
-      const initAI = async () => {
-        try {
-          await AIApiClient.initialize();
-          console.log('AI API client initialized successfully');
-        } catch (error) {
-          console.error('Failed to initialize AI API client:', error);
-        }
-      };
-      initAI();
+    // Load sidebar state from localStorage
+    const savedSidebarState = localStorage.getItem('sidebarCollapsed');
+    if (savedSidebarState !== null) {
+      setIsSidebarCollapsed(savedSidebarState === 'true');
     }
-  }, [user, loading]);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+    if (newTheme) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
+
+  const toggleSidebar = () => {
+    const newState = !isSidebarCollapsed;
+    setIsSidebarCollapsed(newState);
+    localStorage.setItem('sidebarCollapsed', String(newState));
+  };
+
+  useEffect(() => {
+    // Check if user is authenticated using localStorage
+    const token = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user');
+
+    if (!token || !storedUser) {
+      navigate('/user/login');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(storedUser);
+      setUser(userData);
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      navigate('/user/login');
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate]);
 
   const filteredServices = PR_SERVICES.filter(service => {
     const matchesSearch = service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -89,15 +134,17 @@ const Dashboard = () => {
     return matchesSearch && matchesLayer;
   });
 
-  const handleSignOut = async () => {
-    await signOut();
+  const handleSignOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out",
+    });
     navigate('/');
   };
 
   const getInitials = () => {
-    if (profile?.display_name) {
-      return profile.display_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-    }
     if (user?.email) {
       return user.email.slice(0, 2).toUpperCase();
     }
@@ -116,61 +163,112 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Dashboard Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/95 backdrop-blur-md">
-        <div className="container flex h-36 md:h-40 items-center justify-between">
-          {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <img
-              src={logo}
-              alt="Relaya Logo"
-              className="h-16 md:h-16 w-auto object-contain"
-            />
+    <div className="min-h-screen bg-background flex">
+      {/* Sidebar */}
+      <aside className={`hidden md:flex fixed left-0 top-0 z-50 h-screen border-r border-border bg-background flex-col transition-all duration-300 ${
+        isSidebarCollapsed ? 'w-16' : 'w-64'
+      }`}>
+        {/* Logo Section with Toggle Button */}
+        <div className="relative p-4 lg:p-6 border-b border-border">
+          <Link to="/dashboard" className="flex items-center justify-center">
+            {!isSidebarCollapsed && (
+              <img
+                src={isDarkMode ? '/logo-white.svg' : '/logo-black.svg'}
+                alt="Relaya Logo"
+                className="h-12 lg:h-16 w-auto object-contain"
+              />
+            )}
+            {isSidebarCollapsed && (
+              <img
+                src="/standalone-logo.svg"
+                alt="Relaya"
+                className="w-10 h-10 object-contain"
+              />
+            )}
           </Link>
+          {/* Toggle Button */}
+          <button
+            onClick={toggleSidebar}
+            className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-background border border-border rounded-full flex items-center justify-center hover:bg-accent transition-colors shadow-sm"
+            title={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {isSidebarCollapsed ? (
+              <ChevronRight className="w-3.5 h-3.5" />
+            ) : (
+              <ChevronLeft className="w-3.5 h-3.5" />
+            )}
+          </button>
+        </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {[
-              { id: 'services', label: 'Services', icon: Layers },
-              { id: 'tools', label: 'Tools', icon: Zap },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
-                  activeTab === tab.id 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                }`}
-              >
-                <tab.icon className="w-4 h-4" />
-                {tab.label}
-              </button>
-            ))}
-          </nav>
+        {/* Navigation */}
+        <nav className="flex-1 p-3 lg:p-4 space-y-2 overflow-y-auto">
+          {[
+            { id: 'services', label: 'Services', icon: Layers },
+            { id: 'tools', label: 'Tools', icon: Zap },
+            { id: 'outreach', label: 'Outreach Campaign', icon: Send },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`w-full flex items-center gap-3 px-3 lg:px-4 py-2.5 lg:py-3 text-sm font-medium transition-all duration-300 ${
+                activeTab === tab.id
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              } ${isSidebarCollapsed ? 'justify-center' : ''}`}
+              title={isSidebarCollapsed ? tab.label : undefined}
+            >
+              <tab.icon className="w-4 lg:w-5 h-4 lg:h-5 flex-shrink-0" />
+              {!isSidebarCollapsed && <span className="truncate">{tab.label}</span>}
+            </button>
+          ))}
+        </nav>
 
-          {/* User Menu */}
-          <div className="flex items-center gap-3">
-            <DropdownMenu>
+        {/* User Section at Bottom */}
+        <div className="border-t border-border">
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={toggleTheme}
+            className={`w-full flex items-center gap-2 px-4 py-3 text-xs text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors border-b border-border ${
+              isSidebarCollapsed ? 'justify-center' : 'justify-center'
+            }`}
+            title={isSidebarCollapsed ? (isDarkMode ? 'Switch to light mode' : 'Switch to dark mode') : undefined}
+          >
+            {isDarkMode ? (
+              <>
+                <Sun className="w-3.5 h-3.5" />
+                {!isSidebarCollapsed && <span>Light</span>}
+              </>
+            ) : (
+              <>
+                <Moon className="w-3.5 h-3.5" />
+                {!isSidebarCollapsed && <span>Dark</span>}
+              </>
+            )}
+          </button>
+
+          <div className="p-4 lg:p-6">
+            {!isSidebarCollapsed ? (
+              <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 px-2">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={profile?.avatar_url || undefined} />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                <Button variant="ghost" className="w-full flex items-center gap-2 lg:gap-3 px-2 lg:px-3 py-2 lg:py-3 hover:bg-accent">
+                  <Avatar className="h-8 lg:h-10 w-8 lg:w-10 flex-shrink-0">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs lg:text-sm">
                       {getInitials()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="hidden md:inline text-sm font-medium">
-                    {profile?.display_name || user?.email?.split('@')[0]}
-                  </span>
-                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                  <div className="flex-1 text-left overflow-hidden min-w-0">
+                    <p className="text-xs lg:text-sm font-medium truncate">
+                      {user?.email?.split('@')[0] || 'User'}
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                  </div>
+                  <ChevronDown className="w-3 lg:w-4 h-3 lg:h-4 text-muted-foreground flex-shrink-0" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
                   <div className="flex flex-col">
-                    <span>{profile?.display_name || 'User'}</span>
+                    <span>{user?.email?.split('@')[0] || 'User'}</span>
                     <span className="text-xs text-muted-foreground font-normal">{user?.email}</span>
                   </div>
                 </DropdownMenuLabel>
@@ -186,24 +284,74 @@ const Dashboard = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-accent transition-colors"
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+            ) : (
+              <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="w-full flex items-center justify-center p-2 hover:bg-accent">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                      {getInitials()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col">
+                    <span>{user?.email?.split('@')[0] || 'User'}</span>
+                    <span className="text-xs text-muted-foreground font-normal">{user?.email}</span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/profile')}>
+                  <User className="w-4 h-4 mr-2" />
+                  Profile Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            )}
           </div>
         </div>
+      </aside>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md">
-            <nav className="container py-4 flex flex-col gap-1">
+      {/* Mobile Menu Toggle */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-background border border-border hover:bg-accent transition-colors"
+      >
+        {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+      </button>
+
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <>
+          <div
+            className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <aside className="md:hidden fixed left-0 top-0 z-50 h-screen w-64 border-r border-border bg-background flex flex-col">
+            {/* Logo Section */}
+            <div className="p-6 border-b border-border">
+              <Link to="/dashboard" className="flex items-center justify-center">
+                <img
+                  src={isDarkMode ? '/logo-white.svg' : '/logo-black.svg'}
+                  alt="Relaya Logo"
+                  className="h-16 w-auto object-contain"
+                />
+              </Link>
+            </div>
+
+            {/* Navigation */}
+            <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
               {[
                 { id: 'services', label: 'Services', icon: Layers },
                 { id: 'tools', label: 'Tools', icon: Zap },
+                { id: 'outreach', label: 'Outreach Campaign', icon: Send },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -211,69 +359,102 @@ const Dashboard = () => {
                     setActiveTab(tab.id);
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium rounded-lg transition-all ${
-                    activeTab === tab.id 
-                      ? 'bg-primary text-primary-foreground' 
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all ${
+                    activeTab === tab.id
+                      ? 'bg-primary text-primary-foreground shadow-md'
                       : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                   }`}
                 >
-                  <tab.icon className="w-4 h-4" />
-                  {tab.label}
+                  <tab.icon className="w-5 h-5 flex-shrink-0" />
+                  <span className="truncate">{tab.label}</span>
                 </button>
               ))}
             </nav>
-          </div>
-        )}
-      </header>
 
-      {/* Main Content */}
-      <main className="flex-1">
-        {/* Welcome Banner */}
-        <section className="border-b border-border/50 bg-gradient-to-r from-primary/5 via-transparent to-info/5">
-          <div className="container py-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-1">
-                  Welcome back, {profile?.display_name?.split(' ')[0] || 'there'}
-                </h1>
-                <p className="text-muted-foreground">
-                  Access all 50 PR services and advanced tools from your dashboard
-                </p>
+            {/* User Section at Bottom */}
+            <div className="border-t border-border">
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 text-xs text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors border-b border-border"
+              >
+                {isDarkMode ? (
+                  <>
+                    <Sun className="w-3.5 h-3.5" />
+                    <span>Light</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="w-3.5 h-3.5" />
+                    <span>Dark</span>
+                  </>
+                )}
+              </button>
+
+              <div className="p-6">
+              <div className="flex items-center gap-3 px-3 py-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                    {getInitials()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 overflow-hidden">
+                  <p className="text-sm font-medium truncate">
+                    {user?.email?.split('@')[0] || 'User'}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                </div>
               </div>
-              <div className="flex items-center gap-4">
-                {[
-                  { icon: Layers, label: '10 Layers', color: 'text-primary' },
-                  { icon: Zap, label: '50 Services', color: 'text-amber-500' },
-                  { icon: Shield, label: 'Compliance', color: 'text-green-500' },
-                ].map((stat, i) => (
-                  <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border/50">
-                    <stat.icon className={`w-4 h-4 ${stat.color}`} />
-                    <span className="text-sm font-medium">{stat.label}</span>
-                  </div>
-                ))}
+              <div className="space-y-1 mt-2">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-sm"
+                  onClick={() => {
+                    navigate('/profile');
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Profile Settings
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-sm text-destructive hover:text-destructive"
+                  onClick={handleSignOut}
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
               </div>
             </div>
-          </div>
-        </section>
+          </aside>
+        </>
+      )}
+
+      {/* Main Content */}
+      <main className={`flex-1 w-full min-h-screen transition-all duration-300 ${
+        isSidebarCollapsed ? 'md:ml-16' : 'md:ml-64'
+      }`}>
 
         {activeTab === 'services' && (
           <>
             {/* Layers Section */}
-            <section className="py-6 bg-muted/30 border-b border-border/50">
-              <div className="container">
-                <h2 className="text-lg font-semibold text-foreground mb-4">Capability Layers</h2>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            <section className="py-4 md:py-6 bg-muted/30 border-b border-border">
+              <div className="container px-4">
+                <h2 className="text-base md:text-lg font-semibold text-foreground mb-3 md:mb-4">Capability Layers</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
                   {CAPABILITY_LAYERS.map((layer) => (
                     <button
                       key={layer.id}
                       onClick={() => setSelectedLayer(selectedLayer === layer.id ? null : layer.id)}
-                      className={`p-3 rounded-xl border transition-all duration-300 text-left ${
+                      className={`p-3 border transition-all duration-300 text-left ${
                         selectedLayer === layer.id
                           ? `${layer.color} text-white border-transparent shadow-lg`
-                          : 'border-border/50 bg-card hover:shadow-md'
+                          : 'border-border bg-card hover:shadow-md'
                       }`}
                     >
-                      <div className={`w-6 h-6 rounded-lg ${selectedLayer === layer.id ? 'bg-white/20' : layer.color} flex items-center justify-center text-xs font-bold mb-1 ${selectedLayer === layer.id ? '' : 'text-white'}`}>
+                      <div className={`w-6 h-6 ${selectedLayer === layer.id ? 'bg-white/20' : layer.color} flex items-center justify-center text-xs font-bold mb-1 ${selectedLayer === layer.id ? '' : 'text-white'}`}>
                         {layer.id}
                       </div>
                       <p className="text-xs font-medium line-clamp-2">
@@ -286,8 +467,8 @@ const Dashboard = () => {
             </section>
 
             {/* Search & Services */}
-            <section className="container py-8">
-              <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <section className="container px-4 py-6 md:py-8">
+              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-4 md:mb-6">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
@@ -313,7 +494,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {filteredServices.map((service, index) => (
                   <ServiceCard
                     key={service.id}
@@ -333,13 +514,41 @@ const Dashboard = () => {
           </>
         )}
 
+        {activeTab === 'outreach' && (
+          <>
+            {!showCampaignForm ? (
+              <section className="container px-4 py-6 md:py-8">
+                <div className="text-center mb-6 md:mb-8">
+                  <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">Outreach Campaign</h2>
+                  <p className="text-sm md:text-base text-muted-foreground">Create and manage your outreach campaigns</p>
+                </div>
+                <div className="max-w-2xl mx-auto text-center space-y-6">
+                  <Button
+                    size="lg"
+                    onClick={() => setShowCampaignForm(true)}
+                    className="gap-2 text-lg px-8 py-6 h-auto"
+                  >
+                    <Send className="w-5 h-5" />
+                    Create New Campaign
+                  </Button>
+                  <p className="text-sm text-muted-foreground">
+                    Start building your personalized outreach campaign
+                  </p>
+                </div>
+              </section>
+            ) : (
+              <CreateCampaignForm onClose={() => setShowCampaignForm(false)} />
+            )}
+          </>
+        )}
+
         {activeTab === 'tools' && (
-          <section className="container py-8">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Advanced PR Tools</h2>
-              <p className="text-muted-foreground">Enterprise-grade tools for comprehensive PR operations</p>
+          <section className="container px-4 py-6 md:py-8">
+            <div className="text-center mb-6 md:mb-8">
+              <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">Advanced PR Tools</h2>
+              <p className="text-sm md:text-base text-muted-foreground">Enterprise-grade tools for comprehensive PR operations</p>
             </div>
-            
+
             <Tabs defaultValue="press-kit" className="w-full max-w-5xl mx-auto">
               <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-8 mb-8">
                 <TabsTrigger value="press-kit" className="flex items-center gap-1.5 text-xs">
