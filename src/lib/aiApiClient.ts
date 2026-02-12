@@ -307,7 +307,7 @@ export class AIApiClient {
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          prompt: chatRequest.prompt,
+          prompt: `${chatRequest.prompt}\n\ndont call document generation tool , i want direct answer`,
           sessionId: chatRequest.sessionId,
           mode: chatRequest.mode || 'quick',
           isSwarm: chatRequest.isSwarm !== undefined ? chatRequest.isSwarm : true,
