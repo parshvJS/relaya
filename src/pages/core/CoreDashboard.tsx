@@ -7,7 +7,7 @@ import { Loader2, LogOut, User, Mail, Calendar, Zap, TrendingUp, FileText, BarCh
 import NetworkAnimation from '@/components/NetworkAnimation';
 import { useTheme } from '@/hooks/useTheme';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://relaya-backend-rhsy6.ondigitalocean.app';
 
 const CoreDashboard = () => {
   const navigate = useNavigate();
