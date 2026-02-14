@@ -37,6 +37,7 @@ import Login from "./pages/user/Login";
 import CreateAccount from "./pages/user/CreateAccount";
 import Campaign from "./pages/Campaign";
 import CreateNewCampaign from "./pages/campaign/CreateNewCampaign";
+import CampaignStatus from "./pages/campaign/CampaignStatus";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/campaign" element={<Campaign />} />
             <Route path="/campaign/create-new-campaign" element={<CreateNewCampaign />} />
+            <Route path="/campaign-status/:id" element={<CampaignStatus />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
 

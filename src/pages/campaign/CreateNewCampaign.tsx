@@ -22,6 +22,7 @@ interface EmailConfig {
   instantlyApiKey: string;
   selectedEmails: string[];
   purposeOfOutreach: string;
+  senderName: string;
   emailStyle: string;
   customStyle: string;
 }
@@ -81,6 +82,7 @@ const CreateNewCampaign = () => {
     instantlyApiKey: '',
     selectedEmails: [],
     purposeOfOutreach: '',
+    senderName: '',
     emailStyle: '',
     customStyle: '',
   });
@@ -105,7 +107,7 @@ const CreateNewCampaign = () => {
   const step1Fields = ['leadSource', 'amountOfLeads', 'searchTerm'];
 
   // Step 2 fields
-  const step2Fields = ['instantlyApiKey', 'emailSelection', 'purposeOfOutreach', 'emailStyle'];
+  const step2Fields = ['instantlyApiKey', 'emailSelection', 'purposeOfOutreach', 'senderName', 'emailStyle'];
 
   // Debounced API call to check instantly API key
   useEffect(() => {
@@ -262,6 +264,25 @@ const CreateNewCampaign = () => {
         }
       }
 
+      if (currentField === 'senderName') {
+        if (!emailConfig.senderName.trim()) {
+          toast({
+            title: "Sender Name Required",
+            description: "Please enter the sender name for email signature",
+            variant: "destructive",
+          });
+          return;
+        }
+        if (emailConfig.senderName.length > 100) {
+          toast({
+            title: "Too Long",
+            description: "Sender name must be maximum 100 characters",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
       if (currentField === 'emailStyle' && !emailConfig.emailStyle) {
         toast({
           title: "Style Required",
@@ -297,7 +318,11 @@ const CreateNewCampaign = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    console.log('=== HANDLE SUBMIT CALLED ===');
+    console.log('Lead Settings:', leadSettings);
+    console.log('Email Config:', emailConfig);
+
     // Validate custom style if provided
     if (emailConfig.customStyle && emailConfig.customStyle.length > 500) {
       toast({
@@ -308,14 +333,86 @@ const CreateNewCampaign = () => {
       return;
     }
 
-    // Submit the campaign
-    toast({
-      title: "Campaign Created!",
-      description: "Your outreach campaign has been successfully created",
-    });
+    try {
+      // Prepare the API payload
+      const payload = {
+        searchTerm: leadSettings.searchTerm.trim(),
+        instantlyApiKey: emailConfig.instantlyApiKey,
+        numberOfLeads: leadSettings.amountOfLeads,
+        senderName: emailConfig.senderName.trim(),
+        instantlyEmails: emailConfig.selectedEmails,
+        emailPurpose: emailConfig.purposeOfOutreach.trim(),
+        emailStyle: emailConfig.customStyle.trim() || emailConfig.emailStyle,
+        platform: leadSettings.leadSource === 'media-blog' ? 'media' : 'podcast',
+        freshness: 'week' // Default freshness for media platform
+      };
 
-    // Navigate back or to campaign dashboard
-    navigate('/campaign');
+      // Get token from localStorage
+      const token = localStorage.getItem('token');
+      console.log('Token exists:', !!token);
+
+      if (!token) {
+        console.log('No token found, redirecting to login');
+        toast({
+          title: "Authentication Required",
+          description: "Please login to create a campaign",
+          variant: "destructive",
+        });
+        navigate('/user/login');
+        return;
+      }
+
+      // Show loading toast
+      toast({
+        title: "Creating Campaign...",
+        description: "Please wait while we set up your outreach campaign",
+      });
+
+      console.log('Making API call with payload:', payload);
+
+      // Make API call to create campaign
+      const response = await axios.post(
+        'http://localhost:3000/api/outreach/start-job',
+        payload,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      console.log('API Response:', response.data);
+
+      if (response.data.success) {
+        const jobId = response.data.data.jobId;
+        console.log('Campaign created successfully, jobId:', jobId);
+
+        toast({
+          title: "Campaign Started!",
+          description: "Redirecting to campaign status...",
+        });
+
+        // Redirect to campaign status page
+        console.log('Navigating to:', `/campaign-status/${jobId}`);
+        navigate(`/campaign-status/${jobId}`);
+      } else {
+        toast({
+          title: "Error",
+          description: response.data.message || "Failed to create campaign",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      console.error('=== ERROR IN HANDLE SUBMIT ===');
+      console.error('Error creating campaign:', error);
+      console.error('Error response:', error.response);
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to create campaign. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const renderLeadSourceField = () => (
@@ -404,8 +501,8 @@ const CreateNewCampaign = () => {
         <p className="text-muted-foreground">How many leads do you want to target?</p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-        {[50, 100, 500, 1000].map((amount) => (
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+        {[50, 100, 200, 300, 400, 500].map((amount) => (
           <button
             key={amount}
             onClick={() => {
@@ -732,6 +829,50 @@ const CreateNewCampaign = () => {
     </div>
   );
 
+  const renderSenderNameField = () => (
+    <div className="space-y-6 animate-fade-in">
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
+          <Mail className="w-4 h-4" />
+          Email Configuration
+        </div>
+        <h2 className="text-3xl font-bold text-foreground mb-2">Sender Name</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto">
+          Who will the emails be signed by?
+        </p>
+      </div>
+
+      <div className="max-w-2xl mx-auto space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="senderName" className="text-base">Your Name</Label>
+          <Input
+            id="senderName"
+            placeholder="e.g., John Smith"
+            value={emailConfig.senderName}
+            onChange={(e) => {
+              setEmailConfig({ ...emailConfig, senderName: e.target.value });
+            }}
+            className="text-lg h-14"
+            maxLength={100}
+          />
+          <div className="flex justify-end text-xs text-muted-foreground">
+            <span>{emailConfig.senderName.length} / 100 characters</span>
+          </div>
+        </div>
+
+        <Card className="p-6 border-border/50 bg-muted/30">
+          <div className="space-y-3 text-sm">
+            <p className="text-foreground font-medium">How this will appear in emails:</p>
+            <div className="bg-card p-4 rounded border border-border/50">
+              <p className="text-muted-foreground italic">Best regards,</p>
+              <p className="text-foreground font-medium mt-1">{emailConfig.senderName || 'Your Name'}</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+
   const renderEmailStyleField = () => (
     <div className="space-y-6 animate-fade-in">
       <div className="text-center mb-8">
@@ -803,6 +944,7 @@ const CreateNewCampaign = () => {
       if (currentField === 'instantlyApiKey') return renderInstantlyApiField();
       if (currentField === 'emailSelection') return renderEmailSelectionField();
       if (currentField === 'purposeOfOutreach') return renderPurposeOfOutreachField();
+      if (currentField === 'senderName') return renderSenderNameField();
       if (currentField === 'emailStyle') return renderEmailStyleField();
     }
     return null;

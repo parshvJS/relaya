@@ -18,10 +18,10 @@ const ServiceCard = ({ service, onClick, style }: ServiceCardProps) => {
       style={style}
     >
       <div className="flex items-start justify-between mb-4">
-        <div className={`flex items-center justify-center w-10 h-10 ${getLayerColor(service.layerNumber)} bg-opacity-10`}>
+        <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${getLayerColor(service.layerNumber)} bg-opacity-10`}>
           <Icon className={`w-5 h-5 ${getLayerTextColor(service.layerNumber)}`} />
         </div>
-        <span className={`layer-badge ${getLayerColor(service.layerNumber)} text-white text-xs`}>
+        <span className={`layer-badge rounded-full ${getLayerColor(service.layerNumber)} text-white text-xs`}>
           Layer {service.layerNumber}
         </span>
       </div>

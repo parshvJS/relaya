@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +18,7 @@ interface EmailConfig {
   instantlyApiKey: string;
   selectedEmails: string[];
   purposeOfOutreach: string;
+  senderName: string;
   emailStyle: string;
   customStyle: string;
 }
@@ -43,6 +45,7 @@ interface CreateCampaignFormProps {
 
 const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const [currentStep, setCurrentStep] = useState(1);
   const [currentFieldIndex, setCurrentFieldIndex] = useState(0);
@@ -57,6 +60,7 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
     instantlyApiKey: '',
     selectedEmails: [],
     purposeOfOutreach: '',
+    senderName: '',
     emailStyle: '',
     customStyle: '',
   });
@@ -77,7 +81,18 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
 
   const totalSteps = 2;
   const step1Fields = ['leadSource', 'amountOfLeads', 'searchTerm'];
-  const step2Fields = ['instantlyApiKey', 'emailSelection', 'purposeOfOutreach', 'emailStyle'];
+  const step2Fields = ['instantlyApiKey', 'emailSelection', 'purposeOfOutreach', 'senderName', 'emailStyle'];
+
+  // Reset amountOfLeads when leadSource changes if the current selection is invalid
+  useEffect(() => {
+    const validOptions = leadSettings.leadSource === 'media-blog'
+      ? [10, 50, 100]
+      : [10, 50, 100, 200];
+
+    if (leadSettings.amountOfLeads && !validOptions.includes(leadSettings.amountOfLeads)) {
+      setLeadSettings(prev => ({ ...prev, amountOfLeads: 0 }));
+    }
+  }, [leadSettings.leadSource]);
 
   // Debounced API call to check instantly API key
   useEffect(() => {
@@ -232,6 +247,25 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
         }
       }
 
+      if (currentField === 'senderName') {
+        if (!emailConfig.senderName.trim()) {
+          toast({
+            title: "Sender Name Required",
+            description: "Please enter the sender name for email signature",
+            variant: "destructive",
+          });
+          return;
+        }
+        if (emailConfig.senderName.length > 100) {
+          toast({
+            title: "Too Long",
+            description: "Sender name must be maximum 100 characters",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
       if (currentField === 'emailStyle' && !emailConfig.emailStyle) {
         toast({
           title: "Style Required",
@@ -267,7 +301,11 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    console.log('=== HANDLE SUBMIT CALLED ===');
+    console.log('Lead Settings:', leadSettings);
+    console.log('Email Config:', emailConfig);
+
     if (emailConfig.customStyle && emailConfig.customStyle.length > 500) {
       toast({
         title: "Custom Style Too Long",
@@ -277,12 +315,89 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
       return;
     }
 
-    toast({
-      title: "Campaign Created!",
-      description: "Your outreach campaign has been successfully created",
-    });
+    try {
+      // Prepare the API payload
+      const payload = {
+        searchTerm: leadSettings.searchTerm.trim(),
+        instantlyApiKey: emailConfig.instantlyApiKey,
+        numberOfLeads: leadSettings.amountOfLeads,
+        senderName: emailConfig.senderName.trim(),
+        instantlyEmails: emailConfig.selectedEmails,
+        emailPurpose: emailConfig.purposeOfOutreach.trim(),
+        emailStyle: emailConfig.customStyle.trim() || emailConfig.emailStyle,
+        platform: leadSettings.leadSource === 'media-blog' ? 'media' : 'podcast',
+        freshness: 'week' // Default freshness for media platform
+      };
 
-    onClose();
+      // Get token from localStorage
+      const token = localStorage.getItem('token');
+      console.log('Token exists:', !!token);
+
+      if (!token) {
+        console.log('No token found, redirecting to login');
+        toast({
+          title: "Authentication Required",
+          description: "Please login to create a campaign",
+          variant: "destructive",
+        });
+        navigate('/user/login');
+        return;
+      }
+
+      // Show loading toast
+      toast({
+        title: "Creating Campaign...",
+        description: "Please wait while we set up your outreach campaign",
+      });
+
+      console.log('Making API call with payload:', payload);
+
+      // Make API call to create campaign
+      const response = await axios.post(
+        'http://localhost:3000/api/outreach/start-job',
+        payload,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      console.log('API Response:', response.data);
+
+      if (response.data.success) {
+        const jobId = response.data.data.jobId;
+        console.log('Campaign created successfully, jobId:', jobId);
+
+        toast({
+          title: "Campaign Started!",
+          description: "Redirecting to campaign status...",
+        });
+
+        // Close the modal/form
+        onClose();
+
+        // Redirect to campaign status page
+        console.log('Navigating to:', `/campaign-status/${jobId}`);
+        navigate(`/campaign-status/${jobId}`);
+      } else {
+        toast({
+          title: "Error",
+          description: response.data.message || "Failed to create campaign",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      console.error('=== ERROR IN HANDLE SUBMIT ===');
+      console.error('Error creating campaign:', error);
+      console.error('Error response:', error.response);
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to create campaign. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const renderLeadSourceField = () => (
@@ -345,41 +460,50 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
     </div>
   );
 
-  const renderAmountOfLeadsField = () => (
-    <div className="space-y-8 animate-fade-in">
-      <div className="space-y-3">
-        <h2 className="text-3xl md:text-4xl font-bold text-foreground">Amount of Leads</h2>
-        <p className="text-muted-foreground text-lg">How many leads do you want to target?</p>
-      </div>
+  const renderAmountOfLeadsField = () => {
+    // Define lead options based on platform
+    const leadOptions = leadSettings.leadSource === 'media-blog'
+      ? [10, 50, 100] // Media: only 10, 50, 100
+      : [10, 50, 100, 200]; // Podcast: 10, 50, 100, 200
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl">
-        {[50, 100, 500, 1000].map((amount) => (
-          <button
-            key={amount}
-            onClick={() => setLeadSettings({ ...leadSettings, amountOfLeads: amount })}
-            className={`p-8 bg-card transition-all hover:bg-accent ${
-              leadSettings.amountOfLeads === amount ? 'ring-2 ring-primary' : ''
-            }`}
-          >
-            <div className="text-center space-y-2">
-              <div className="text-4xl font-bold text-foreground">{amount}</div>
-              <div className="text-sm text-muted-foreground">leads</div>
-            </div>
-            {leadSettings.amountOfLeads === amount && (
-              <div className="mt-3 flex justify-center">
-                <Check className="w-5 h-5 text-primary" />
+    return (
+      <div className="space-y-8 animate-fade-in">
+        <div className="space-y-3">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground">Amount of Leads</h2>
+          <p className="text-muted-foreground text-lg">How many leads do you want to target?</p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl">
+          {leadOptions.map((amount) => (
+            <button
+              key={amount}
+              onClick={() => setLeadSettings({ ...leadSettings, amountOfLeads: amount })}
+              className={`p-8 bg-card transition-all hover:bg-accent ${
+                leadSettings.amountOfLeads === amount ? 'ring-2 ring-primary' : ''
+              }`}
+            >
+              <div className="text-center space-y-2">
+                <div className="text-4xl font-bold text-foreground">{amount}</div>
+                <div className="text-sm text-muted-foreground">leads</div>
               </div>
-            )}
-          </button>
-        ))}
-      </div>
+              {leadSettings.amountOfLeads === amount && (
+                <div className="mt-3 flex justify-center">
+                  <Check className="w-5 h-5 text-primary" />
+                </div>
+              )}
+            </button>
+          ))}
+        </div>
 
-      <div className="p-4 bg-muted/30 text-xs text-muted-foreground max-w-3xl">
-        <Users className="w-4 h-4 inline mr-2" />
-        Choose the number based on your campaign scope and budget
+        <div className="p-4 bg-muted/30 text-xs text-muted-foreground max-w-3xl">
+          <Users className="w-4 h-4 inline mr-2" />
+          {leadSettings.leadSource === 'media-blog'
+            ? 'Media campaigns: up to 100 leads for quality results'
+            : 'Podcast campaigns: up to 200 leads available'}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderSearchTermField = () => (
     <div className="space-y-8 animate-fade-in">
@@ -629,6 +753,40 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
     </div>
   );
 
+  const renderSenderNameField = () => (
+    <div className="space-y-8 animate-fade-in">
+      <div className="space-y-3">
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground">Sender Name</h2>
+        <p className="text-muted-foreground text-lg">Who will the emails be signed by?</p>
+      </div>
+
+      <div className="max-w-2xl space-y-6">
+        <div className="space-y-3">
+          <Label htmlFor="senderName" className="text-xl font-medium">Your Name</Label>
+          <Input
+            id="senderName"
+            placeholder="e.g., John Smith"
+            value={emailConfig.senderName}
+            onChange={(e) => setEmailConfig({ ...emailConfig, senderName: e.target.value })}
+            className="text-xl h-16 bg-card"
+            maxLength={100}
+          />
+          <div className="text-sm text-muted-foreground text-right">
+            {emailConfig.senderName.length} / 100 characters
+          </div>
+        </div>
+
+        <div className="p-4 bg-muted/30 text-xs text-muted-foreground space-y-2">
+          <p className="font-medium text-foreground">How this will appear:</p>
+          <div className="bg-card p-3 rounded border border-border/50">
+            <p className="text-foreground italic">Best regards,</p>
+            <p className="text-foreground font-medium">{emailConfig.senderName || 'Your Name'}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   const renderEmailStyleField = () => (
     <div className="space-y-8 animate-fade-in">
       <div className="space-y-3">
@@ -693,6 +851,7 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
       if (currentField === 'instantlyApiKey') return renderInstantlyApiField();
       if (currentField === 'emailSelection') return renderEmailSelectionField();
       if (currentField === 'purposeOfOutreach') return renderPurposeOfOutreachField();
+      if (currentField === 'senderName') return renderSenderNameField();
       if (currentField === 'emailStyle') return renderEmailStyleField();
     }
     return null;
