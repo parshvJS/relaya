@@ -165,7 +165,7 @@ const Dashboard = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:3000/api/outreach/jobs', {
+      const response = await axios.get('https://relaya-backend-rhsy6.ondigitalocean.app/api/outreach/jobs', {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
@@ -206,7 +206,7 @@ const Dashboard = () => {
       }
 
       const response = await axios.delete(
-        `http://localhost:3000/api/outreach/jobs/${deletingCampaignId}`,
+        `https://relaya-backend-rhsy6.ondigitalocean.app/api/outreach/jobs/${deletingCampaignId}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,

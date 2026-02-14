@@ -106,7 +106,7 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
       setApiValidation({ loading: true, success: false, error: null, emailCount: 0 });
 
       try {
-        const response = await axios.post('http://localhost:3000/api/outreach/instantlyApiCheck', {
+        const response = await axios.post('https://relaya-backend-rhsy6.ondigitalocean.app/api/outreach/instantlyApiCheck', {
           instantlyApiKey: emailConfig.instantlyApiKey,
         });
 
@@ -354,7 +354,7 @@ const CreateCampaignForm = ({ onClose }: CreateCampaignFormProps) => {
 
       // Make API call to create campaign
       const response = await axios.post(
-        'http://localhost:3000/api/outreach/start-job',
+        'https://relaya-backend-rhsy6.ondigitalocean.app/api/outreach/start-job',
         payload,
         {
           headers: {

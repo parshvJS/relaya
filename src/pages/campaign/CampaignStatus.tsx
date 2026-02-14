@@ -174,7 +174,7 @@ const CampaignStatus = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:3000/api/outreach/poll/${id}?includeLeads=true&limit=10000`,
+        `https://relaya-backend-rhsy6.ondigitalocean.app/api/outreach/poll/${id}?includeLeads=true&limit=10000`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -279,7 +279,7 @@ const CampaignStatus = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:3000/api/outreach/continue-outreach',
+        'https://relaya-backend-rhsy6.ondigitalocean.app/api/outreach/continue-outreach',
         { jobId: campaignData.jobId },
         {
           headers: {
@@ -338,7 +338,7 @@ const CampaignStatus = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:3000/api/outreach/continue-instantly',
+        'https://relaya-backend-rhsy6.ondigitalocean.app/api/outreach/continue-instantly',
         { jobId: campaignData.jobId },
         {
           headers: {
@@ -395,7 +395,7 @@ const CampaignStatus = () => {
       }
 
       const response = await axios.delete(
-        `http://localhost:3000/api/outreach/jobs/${id}`,
+        `https://relaya-backend-rhsy6.ondigitalocean.app/api/outreach/jobs/${id}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,

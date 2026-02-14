@@ -9,7 +9,7 @@ import { Loader2, Zap, ArrowLeft, Mail, Lock } from 'lucide-react';
 import NetworkAnimation from '@/components/NetworkAnimation';
 import { useTheme } from '@/hooks/useTheme';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://relaya-backend-rhsy6.ondigitalocean.app';
 
 const Login = () => {
   const navigate = useNavigate();
