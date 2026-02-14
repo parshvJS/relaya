@@ -96,12 +96,12 @@ const AdminOverview = () => {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="h-32 rounded-xl" />
+            <Skeleton key={i} className="h-32" />
           ))}
         </div>
         <div className="grid lg:grid-cols-3 gap-6">
-          <Skeleton className="h-96 rounded-xl lg:col-span-2" />
-          <Skeleton className="h-96 rounded-xl" />
+          <Skeleton className="h-96 lg:col-span-2" />
+          <Skeleton className="h-96" />
         </div>
       </div>
     );
@@ -168,7 +168,7 @@ const AdminOverview = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-card rounded-xl border border-border p-6">
+      <div className="bg-card border border-border p-6">
         <QuickActions />
       </div>
 
@@ -176,17 +176,17 @@ const AdminOverview = () => {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Left Column - Recent Leads */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-card rounded-xl border border-border p-6">
+          <div className="bg-card border border-border p-6">
             <RecentLeadsWidget />
           </div>
           
-          <div className="bg-card rounded-xl border border-border p-6">
+          <div className="bg-card border border-border p-6">
             <SystemHealth />
           </div>
         </div>
 
         {/* Right Column - Activity Feed */}
-        <div className="bg-card rounded-xl border border-border p-6">
+        <div className="bg-card border border-border p-6">
           <ActivityFeed limit={15} />
         </div>
       </div>

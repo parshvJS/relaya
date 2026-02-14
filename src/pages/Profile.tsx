@@ -8,13 +8,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, ArrowLeft, User, Building, Briefcase, Save } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import logo from '@/assets/logo.png';
+import { useTheme } from '@/hooks/useTheme';
 
 const Profile = () => {
   const navigate = useNavigate();
   const { user, profile, updateProfile, loading } = useAuth();
   const { toast } = useToast();
-  
+  const isDarkMode = useTheme();
+
   const [isLoading, setIsLoading] = useState(false);
   const [displayName, setDisplayName] = useState(profile?.display_name || '');
   const [companyName, setCompanyName] = useState(profile?.company_name || '');
@@ -70,7 +71,7 @@ const Profile = () => {
         <div className="container flex h-36 md:h-40 items-center justify-between">
           <Link to="/dashboard" className="flex items-center gap-2">
             <img
-              src={logo}
+              src={isDarkMode ? '/logo-white.svg' : '/logo-black.svg'}
               alt="Relaya Logo"
               className="h-16 md:h-16 w-auto object-contain"
             />

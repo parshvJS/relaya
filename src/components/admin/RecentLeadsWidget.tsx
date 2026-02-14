@@ -106,9 +106,9 @@ const RecentLeadsWidget = () => {
       ) : (
         <div className="space-y-3">
           {leads.map((lead) => (
-            <div 
+            <div
               key={lead.id}
-              className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+              className="flex items-center justify-between p-3 bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
               onClick={() => navigate('/admin/leads')}
             >
               <div className="flex-1 min-w-0">

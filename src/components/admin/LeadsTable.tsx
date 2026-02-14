@@ -55,7 +55,7 @@ const LeadsTable = ({ leads, onStatusChange, onDelete }: LeadsTableProps) => {
 
   return (
     <>
-      <div className="rounded-lg border border-border overflow-hidden">
+      <div className="border border-border overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
@@ -166,7 +166,7 @@ const LeadsTable = ({ leads, onStatusChange, onDelete }: LeadsTableProps) => {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Message</p>
-                <div className="bg-muted/50 rounded-lg p-4">
+                <div className="bg-muted/50 p-4">
                   <p className="text-sm">{selectedLead.message}</p>
                 </div>
               </div>

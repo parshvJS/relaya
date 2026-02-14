@@ -22,7 +22,7 @@ const CTASection = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '200ms' }}>
-            <Link to="/auth">
+            <Link to="/user/create-new-account">
               <Button size="lg" className="btn-primary text-base px-10 py-6 w-full sm:w-auto">
                 Get Started Free
                 <ArrowRight className="w-5 h-5 ml-2" />

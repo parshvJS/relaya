@@ -171,7 +171,7 @@ const AdminUsers = () => {
       <div className="space-y-6">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-10 w-full max-w-md" />
-        <Skeleton className="h-[500px] rounded-xl" />
+        <Skeleton className="h-[500px]" />
       </div>
     );
   }
@@ -198,7 +198,7 @@ const AdminUsers = () => {
       </div>
 
       {/* Users Table */}
-      <div className="rounded-lg border border-border overflow-hidden">
+      <div className="border border-border overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
@@ -221,7 +221,7 @@ const AdminUsers = () => {
                 <TableRow key={profile.id} className="hover:bg-muted/30">
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                      <div className="h-10 w-10 bg-muted flex items-center justify-center">
                         <User className="h-5 w-5 text-muted-foreground" />
                       </div>
                       <div>

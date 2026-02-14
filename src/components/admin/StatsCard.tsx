@@ -19,7 +19,7 @@ const StatsCard = ({
   iconColor = 'text-primary'
 }: StatsCardProps) => {
   return (
-    <div className="bg-card rounded-xl border border-border p-6">
+    <div className="bg-card border border-border p-6">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm text-muted-foreground">{title}</p>
@@ -35,7 +35,7 @@ const StatsCard = ({
             </p>
           )}
         </div>
-        <div className={cn("p-3 rounded-lg bg-muted/50", iconColor)}>
+        <div className={cn("p-3 bg-muted/50", iconColor)}>
           <Icon className="h-6 w-6" />
         </div>
       </div>

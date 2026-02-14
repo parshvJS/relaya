@@ -9,13 +9,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Zap, ArrowLeft, Mail, Lock, User } from 'lucide-react';
 import NetworkAnimation from '@/components/NetworkAnimation';
-import logo from '@/assets/logo.png';
+import { useTheme } from '@/hooks/useTheme';
 
 const Auth = () => {
   const navigate = useNavigate();
   const { user, signIn, signUp, resetPassword, loading: authLoading } = useAuth();
   const { toast } = useToast();
-  
+  const isDarkMode = useTheme();
+
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -170,7 +171,7 @@ const Auth = () => {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2 group">
               <img
-                src={logo}
+                src={isDarkMode ? '/logo-white.svg' : '/logo-black.svg'}
                 alt="Relaya Logo"
                 className="h-16 md:h-16 w-auto object-contain transition-transform group-hover:scale-105"
               />

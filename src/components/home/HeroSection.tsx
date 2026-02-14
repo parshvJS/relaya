@@ -36,7 +36,7 @@ const HeroSection = () => {
             
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 mb-10 animate-fade-in" style={{ animationDelay: '250ms' }}>
-              <Link to="/auth">
+              <Link to="/user/create-new-account">
                 <Button size="lg" className="btn-primary text-base px-8 py-6 w-full sm:w-auto">
                   Get Started Free
                   <ArrowRight className="w-5 h-5 ml-2" />
